@@ -64,7 +64,7 @@ my-monorepo/
 
 ```ts
 // Example frontend usage
-import { UserApi } from '@my-org/sdk';
+import { UserApi } from "@my-org/sdk";
 
 const api = new UserApi();
 api.getUsers().then(console.log);
@@ -200,19 +200,16 @@ To validate deployment:
 ## Client Handover Guide
 
 1. **Domain Configuration:**
-
    - Login to your domain registrar (e.g., Vercel or the provider you used).
    - Add/Update the following DNS record:
      - `CNAME app.xyz.com` → CloudFront distribution domain (provided after deploy)
    - If using ACM for TLS, add DNS validation records provided during `CertStack` deployment.
 
 2. **CI/CD Pipeline:**
-
    - Any pushes to `main` branch trigger build & deploy automatically.
    - Ensure AWS credentials with `cdk deploy` access are configured in GitHub Secrets.
 
 3. **Ongoing Maintenance:**
-
    - To regenerate the SDK after backend changes:
      ```bash
      pnpm --filter sdk generate
@@ -223,11 +220,9 @@ To validate deployment:
      ```
 
 4. **Post-Deployment Checks:**
-
    - Visit `https://app.xyz.com` to verify frontend load.
    - Call `https://app.xyz.com/api/*` endpoints from browser or SDK.
 
 ## Need Professional Help in Developing Your Architecture?
 
 Please contact me at [sammuti.com](https://sammuti.com) :)
-
