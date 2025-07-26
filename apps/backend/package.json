@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "tsoa spec-and-routes && tsc",
+    "build": "ts-node tsoa-config.ts && tsc",
     "start": "node dist/src/server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -27,6 +27,7 @@
     "@types/node": "^24.1.0",
     "eslint": "^9.32.0",
     "joi": "^17.13.3",
+    "ts-node": "^10.9.2",
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.38.0"
   }
