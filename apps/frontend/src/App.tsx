@@ -1,17 +1,21 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
 import "./App.css";
 import { getUser } from "SDK/api";
 
-async function App() {
+function App() {
   const [count, setCount] = useState(0);
-  const user = await getUser();
+  const [user, setUser] = useState("");
+
+  useEffect(() => {
+    getUser().then((x) => setUser(x.data?.name ?? "fail"));
+  }, []);
 
   return (
     <>
       <div>
-        <h1>{user.data?.name}</h1>
+        <h1>{user}</h1>
         <a href="https://vite.dev" target="_blank">
           <img src={viteLogo} className="logo" alt="Vite logo" />
         </a>
