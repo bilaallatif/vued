@@ -37,7 +37,7 @@ importers:
         version: 6.6.0
     devDependencies:
       '@hey-api/openapi-ts':
-        specifier: ^0.80.1
+        specifier: 0.80.1
         version: 0.80.1(typescript@5.8.3)
       '@types/cors':
         specifier: ^2.8.19
