@@ -1,5 +1,6 @@
 import express from "express";
 import logger from "morgan";
+import cors from "cors";
 import { RegisterRoutes } from "../build/routes";
 
 import {
@@ -9,6 +10,11 @@ import {
 
 const app = express();
 
+app.use(
+  cors({
+    origin: "*",
+  }),
+);
 app.use(logger("dev"));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
