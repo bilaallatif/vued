@@ -1,9 +1,11 @@
 import express from "express";
 import logger from "morgan";
-import createError from "http-errors";
 import { RegisterRoutes } from "../build/routes";
 
-import { errorHandler } from "./middleware/error-handling";
+import {
+  missingRouteErrorHandler,
+  validationErrorHandler,
+} from "./middleware/error-handling";
 
 const app = express();
 
@@ -13,12 +15,8 @@ app.use(express.json());
 
 RegisterRoutes(app);
 
-// catch 404 and forward to the error handler
-app.use((_req, _res, next) => {
-  next(createError(404));
-});
-
-// error handler
-app.use(errorHandler);
+// error handling
+app.use("/{*splat}", missingRouteErrorHandler);
+app.use(validationErrorHandler);
 
 export default app;
