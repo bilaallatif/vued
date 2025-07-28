@@ -13,7 +13,7 @@ import config from "./src/config/config";
     entryFile: "src/app.ts",
     controllerPathGlobs: ["src/**/*-controller.ts"],
     specVersion: 3,
-    outputDirectory: "dist",
+    outputDirectory: "build",
     host: `localhost:${config.port}`,
     schemes: ["http"],
   };
