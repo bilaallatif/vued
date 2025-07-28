@@ -20,7 +20,7 @@ export class CertStack extends cdk.Stack {
     // );
 
     const certificate_ARN =
-      "arn:aws:acm:us-east-1:928747726543:certificate/f9036a63-646e-421f-b939-feb23bcf1c71";
+      "arn:aws:acm:us-east-1:928747726543:certificate/61bd0991-b091-4a9e-bc1b-d0747154fe77";
 
     // Create reference to certificate
     this.certificate = aws_certificatemanager.Certificate.fromCertificateArn(
