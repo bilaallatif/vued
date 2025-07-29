@@ -1,21 +1,28 @@
 import { useEffect, useState } from "react";
 import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
+import { Default } from "@vued/sdk/api";
+import { client } from "@vued/sdk/api/client.gen";
 import "./App.css";
-import { getUser } from "SDK/api";
 
 function App() {
   const [count, setCount] = useState(0);
   const [user, setUser] = useState("");
 
+  const apiUrl: string = import.meta.env.VITE_API_URL;
+  client.setConfig({
+    baseUrl: apiUrl,
+  });
+
   useEffect(() => {
-    getUser().then((x) => setUser(x.data?.name ?? "fail"));
+    Default.getUser().then((x) => setUser(x.data?.name ?? "fail"));
   }, []);
 
   return (
     <>
       <div>
         <h1>{user}</h1>
+        <h1>{apiUrl}</h1>
         <a href="https://vite.dev" target="_blank">
           <img src={viteLogo} className="logo" alt="Vite logo" />
         </a>
