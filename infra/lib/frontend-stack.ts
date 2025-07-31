@@ -4,6 +4,7 @@ import {
   aws_certificatemanager,
   aws_cloudfront,
   aws_cloudfront_origins,
+  aws_elasticloadbalancingv2,
   aws_s3,
   aws_s3_deployment,
   CfnOutput,
@@ -11,6 +12,7 @@ import {
 
 interface FrontendStackProps extends cdk.StackProps {
   certificate: aws_certificatemanager.ICertificate;
+  backend_load_balancer: aws_elasticloadbalancingv2.ApplicationLoadBalancer;
 }
 
 export class FrontendStack extends cdk.Stack {
@@ -54,6 +56,17 @@ export class FrontendStack extends cdk.Stack {
         allowedMethods: aws_cloudfront.AllowedMethods.ALLOW_GET_HEAD,
         compress: true,
       },
+      // additionalBehaviors: {
+      //   "/api/*": {
+      //     origin: new aws_cloudfront_origins.HttpOrigin(
+      //       props.backend_load_balancer.loadBalancerDnsName,
+      //       { protocolPolicy: aws_cloudfront.OriginProtocolPolicy.HTTPS_ONLY },
+      //     ),
+      //     cachePolicy: aws_cloudfront.CachePolicy.CACHING_DISABLED,
+      //     originRequestPolicy: aws_cloudfront.OriginRequestPolicy.ALL_VIEWER,
+      //     allowedMethods: aws_cloudfront.AllowedMethods.ALLOW_ALL,
+      //   },
+      // },
       certificate: props.certificate,
       priceClass: aws_cloudfront.PriceClass.PRICE_CLASS_100,
     });

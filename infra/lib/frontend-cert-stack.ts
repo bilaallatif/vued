@@ -2,7 +2,7 @@ import * as cdk from "aws-cdk-lib";
 import { Construct } from "constructs";
 import { aws_certificatemanager } from "aws-cdk-lib";
 
-export class CertStack extends cdk.Stack {
+export class FrontendCertStack extends cdk.Stack {
   public readonly certificate: aws_certificatemanager.ICertificate;
 
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
@@ -25,7 +25,7 @@ export class CertStack extends cdk.Stack {
     // Create reference to certificate
     this.certificate = aws_certificatemanager.Certificate.fromCertificateArn(
       this,
-      "VuedCert",
+      "VuedCertFrontend",
       certificate_ARN,
     );
   }

@@ -109,7 +109,7 @@ infra/
 ├── lib/
 │   ├── frontend-stack.ts    # S3 + CloudFront (frontend + API proxy)
 │   ├── backend-stack.ts     # EC2 + internal ALB
-│   └── cert-stack.ts        # ACM cert only (DNS managed in Vercel)
+│   └── frontend-cert-stack.ts        # ACM cert only (DNS managed in Vercel)
 ├── package.json
 └── cdk.json
 ```
@@ -124,7 +124,7 @@ Each stack includes:
   - VPC + EC2 instance
   - ALB (internal)
   - Security group allowing CloudFront IP range
-- `cert-stack.ts`:
+- `frontend-cert-stack.ts`:
   - ACM certificate for `app.xyz.com`
   - DNS validation records will be **manually** added to Vercel
 
@@ -141,7 +141,7 @@ Each stack includes:
 2. **Deploy Stacks in Order:**
 
    ```bash
-   cdk deploy CertStack
+   cdk deploy FrontendCertStack
    # After cert DNS validated manually in Vercel:
    cdk deploy BackendStack
    cdk deploy FrontendStack
@@ -203,7 +203,7 @@ To validate deployment:
    - Login to your domain registrar (e.g., Vercel or the provider you used).
    - Add/Update the following DNS record:
      - `CNAME app.xyz.com` → CloudFront distribution domain (provided after deploy)
-   - If using ACM for TLS, add DNS validation records provided during `CertStack` deployment.
+   - If using ACM for TLS, add DNS validation records provided during `FrontendCertStack` deployment.
 
 2. **CI/CD Pipeline:**
    - Any pushes to `main` branch trigger build & deploy automatically.
