@@ -19,6 +19,10 @@ app.use(logger("dev"));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
+app.get("/", (_req, res) => {
+  res.send("Ok");
+});
+
 RegisterRoutes(app);
 
 // error handling

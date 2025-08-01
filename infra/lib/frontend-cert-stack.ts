@@ -20,7 +20,7 @@ export class FrontendCertStack extends cdk.Stack {
     // );
 
     const certificate_ARN =
-      "arn:aws:acm:us-east-1:928747726543:certificate/61bd0991-b091-4a9e-bc1b-d0747154fe77";
+      "arn:aws:acm:us-east-1:928747726543:certificate/7c53e8e1-e701-492a-a107-94c1b2ba7b64";
 
     // Create reference to certificate
     this.certificate = aws_certificatemanager.Certificate.fromCertificateArn(
