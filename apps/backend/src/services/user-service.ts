@@ -2,6 +2,7 @@ import { User } from "@prisma/client";
 import db_client from "../database/prisma";
 import { UserCreationProps } from "../controllers/user-controller";
 import { DatabaseError, ERR, OK, Result } from "../types/result";
+import bcrypt from "bcryptjs";
 
 export class UserService {
   public async get(id: string): Promise<Result<User, DatabaseError>> {
@@ -16,7 +17,7 @@ export class UserService {
     return await db_client.user.create({
       data: {
         username: username,
-        password: password,
+        password: await bcrypt.hash(password, 10),
       },
     });
   }

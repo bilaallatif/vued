@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Get,
+  Middlewares,
   Path,
   Post,
   Route,
@@ -11,6 +12,7 @@ import { UserService } from "../services/user-service";
 import { User } from "@prisma/client";
 import { DatabaseError } from "../types/result";
 import { HttpError } from "../types/exceptions";
+import { authHandler } from "../middleware/authentication";
 
 export type UserCreationProps = Pick<User, "username" | "password">;
 
@@ -19,6 +21,7 @@ export class UserController extends Controller {
   private readonly userService: UserService = new UserService();
 
   @Get("{id}")
+  @Middlewares(authHandler)
   public async getUser(@Path() id: string): Promise<User> {
     const user_result = await this.userService.get(id);
     if (!user_result.ok) {
