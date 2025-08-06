@@ -62,7 +62,7 @@
 * movie
   * id, tmdb_id(unique), title, overview, poster_path(served by CDN i.e. no charge)
 
-## Relations
+### Relations
 * user - profile (1-1) "user-profile"
 * profile - review (1-many) "profile-review"
 * review - movie (many-1) "review"
