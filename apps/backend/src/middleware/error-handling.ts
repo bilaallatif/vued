@@ -1,5 +1,6 @@
 import { ErrorRequestHandler, RequestHandler, Response } from "express";
 import { ValidateError } from "tsoa";
+import { HttpError } from "../types/exceptions";
 
 export const missingRouteErrorHandler: RequestHandler = (_req, res) => {
   res.status(404).send({
@@ -19,6 +20,9 @@ export const validationErrorHandler: ErrorRequestHandler = (
       message: "Validation Failed",
       details: err?.fields,
     });
+  }
+  if (err instanceof HttpError) {
+    return res.status(err.status).json({ message: err.message });
   }
   if (err instanceof Error) {
     return res.status(500).json({
