@@ -21,6 +21,16 @@ export const validationErrorHandler: ErrorRequestHandler = (
       details: err?.fields,
     });
   }
+
+  next(err);
+};
+
+export const httpErrorHandler: ErrorRequestHandler = (
+  err,
+  _req,
+  res,
+  next,
+): Response | void => {
   if (err instanceof HttpError) {
     return res.status(err.status).json({ message: err.message });
   }
@@ -30,5 +40,5 @@ export const validationErrorHandler: ErrorRequestHandler = (
     });
   }
 
-  next();
+  next(err);
 };

@@ -4,6 +4,7 @@ import cors from "cors";
 import { RegisterRoutes } from "../build/routes";
 
 import {
+  httpErrorHandler,
   missingRouteErrorHandler,
   validationErrorHandler,
 } from "./middleware/error-handling";
@@ -28,5 +29,6 @@ RegisterRoutes(app);
 // error handling
 app.use("/{*splat}", missingRouteErrorHandler);
 app.use(validationErrorHandler);
+app.use(httpErrorHandler);
 
 export default app;
