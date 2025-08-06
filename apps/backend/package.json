@@ -7,13 +7,15 @@
     "build": "ts-node tsoa-config.ts && tsc",
     "start": "node dist/src/server.js",
     "build:sdk": "ts-node sdk-generator.ts",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "format": "prisma format --schema prisma/schema.prisma"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "packageManager": "pnpm@10.13.1",
   "dependencies": {
+    "@prisma/client": "6.13.0",
     "@tsoa/runtime": "^6.6.0",
     "cors": "^2.8.5",
     "dotenv": "^17.2.1",
@@ -31,6 +33,7 @@
     "@types/node": "^24.1.0",
     "eslint": "^9.32.0",
     "joi": "^17.13.3",
+    "prisma": "^6.13.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.38.0"

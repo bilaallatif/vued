@@ -1,6 +1,6 @@
-import User from "../types/user";
 import { Body, Controller, Get, Post, Route, SuccessResponse } from "tsoa";
 import { UserService } from "../services/user-service";
+import { User } from "@prisma/client";
 
 @Route("/user")
 export class UserController extends Controller {
@@ -13,6 +13,6 @@ export class UserController extends Controller {
   @Post()
   public async createUser(@Body() _requestBody: User): Promise<User> {
     this.setStatus(201);
-    return new UserService().get();
+    return new UserService().create();
   }
 }
