@@ -85,5 +85,5 @@
    1) ~~Add prisma (backend)~~
    2) ~~Create user-related schema~~
    3) Write backend for account system
-   4) Add authentication (JWT)
+   4) ~~Add authentication (JWT)~~
    5) Write frontend for account system (login/register)
