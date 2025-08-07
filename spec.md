@@ -87,3 +87,6 @@
    3) Write backend for account system
    4) ~~Add authentication (JWT)~~
    5) Write frontend for account system (login/register)
+2) Account extension (later)
+   1) Email verification
+   2) Password reset
