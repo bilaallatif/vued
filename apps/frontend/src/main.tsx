@@ -5,6 +5,7 @@ import { BaseRoute } from "./components/base.tsx";
 import { LoginRoute } from "./components/login.tsx";
 import { client } from "@vued/sdk/api/client.gen";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import "./index.css";
 
 const routeTree = BaseRoute.addChildren([LoginRoute]);
 const router = createRouter({ routeTree });

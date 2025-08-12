@@ -15,7 +15,7 @@ const Login = () => {
   if (isPending) return <h1>Loading...</h1>;
   if (error) return <h1>Error: {error.message}</h1>;
 
-  return <h1>{data?.data}</h1>;
+  return <h1 className={"text-3xl"}>{data?.data}</h1>;
 };
 
 export const LoginRoute = createRoute({
