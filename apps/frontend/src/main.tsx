@@ -6,8 +6,9 @@ import { LoginRoute } from "./components/login.tsx";
 import { client } from "@vued/sdk/api/client.gen";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import "./index.css";
+import { HomeRoute } from "./components/home.tsx";
 
-const routeTree = BaseRoute.addChildren([LoginRoute]);
+const routeTree = BaseRoute.addChildren([LoginRoute, HomeRoute]);
 const router = createRouter({ routeTree });
 
 const apiUrl: string = import.meta.env.VITE_API_URL;
