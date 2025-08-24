@@ -3,7 +3,11 @@ import { createRootRoute, Outlet } from "@tanstack/react-router";
 
 const Base = () => {
   return (
-    <div className={"h-screen bg-neutral-900 flex flex-col items-center"}>
+    <div
+      className={
+        "h-screen bg-neutral-900 flex flex-col items-center font-[Courier]"
+      }
+    >
       <h1
         className={
           "text-yellow-600 font-bold text-5xl tracking-widest bg-neutral-100/5 py-5 w-full text-center"
