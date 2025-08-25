@@ -15,11 +15,7 @@ const Base = () => {
       >
         VUE'D
       </h1>
-      <div
-        className={
-          "isolate relative flex-1 flex flex-col justify-center w-full h-full"
-        }
-      >
+      <div className={"isolate relative flex-1 w-full h-full"}>
         <Outlet />
       </div>
       <h1
