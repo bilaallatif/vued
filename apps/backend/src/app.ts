@@ -2,6 +2,7 @@ import express from "express";
 import logger from "morgan";
 import cors from "cors";
 import { RegisterRoutes } from "../build/routes";
+import cookieParser from "cookie-parser";
 
 import {
   httpErrorHandler,
@@ -18,6 +19,7 @@ app.use(
 );
 app.use(logger("dev"));
 app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
 app.use(express.json());
 
 app.get("/", (_req, res) => {
