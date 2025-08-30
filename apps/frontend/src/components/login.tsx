@@ -1,8 +1,15 @@
-import { createRoute } from "@tanstack/react-router";
+import {
+  createRoute,
+  Route,
+  useNavigate,
+  useRouteContext,
+} from "@tanstack/react-router";
 import { BaseRoute } from "./base.tsx";
 import { useState } from "react";
 
 const Login = () => {
+  const context = useRouteContext({ from: "/login" });
+  const navigate = useNavigate({ from: "/login" });
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
@@ -28,6 +35,11 @@ const Login = () => {
               className={
                 "text-neutral-900 text-2xl bg-yellow-600 p-2 rounded-md hover:bg-yellow-500 hover:scale-110 transition-transform duration-200"
               }
+              onClick={async () => {
+                // @ts-ignore
+                await context.auth.login(username, password);
+                navigate({ to: "/home" });
+              }}
             >
               Log In
             </button>
