@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Route, Request } from "tsoa";
+import { Body, Controller, Get, Post, Route, Request, Middlewares } from "tsoa";
 import { User } from "@prisma/client";
 import { AuthService } from "../services/auth-service";
 import { DatabaseError } from "../types/result";
@@ -6,12 +6,19 @@ import { HttpError } from "../types/exceptions";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import { Request as ExRequest } from "express";
+import { authHandler } from "../middleware/authentication";
 
 type LoginProps = Pick<User, "username" | "password">;
 
 @Route("/auth")
 export class AuthController extends Controller {
   private readonly loginService: AuthService = new AuthService();
+
+  @Get("test")
+  @Middlewares(authHandler)
+  public async test(): Promise<string> {
+    return "Authenticated!";
+  }
 
   @Get("refresh")
   public async refresh(@Request() req: ExRequest): Promise<string> {

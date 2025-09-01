@@ -1,19 +1,29 @@
 import { createRoute, redirect } from "@tanstack/react-router";
 import { BaseRoute } from "./base.tsx";
+import { Default } from "@vued/sdk/api";
+import { useState } from "react";
 
 const Home = () => {
-  const navigate = BaseRoute.useNavigate();
+  const [authText, setAuthText] = useState<string>("Pre Test");
 
   return (
     <div className={"w-full h-full flex flex-col items-center justify-center"}>
-      <h1 className={"text-5xl text-neutral-400"}>Authenticated</h1>
+      <h1 className={"text-5xl text-neutral-400"}>{authText}</h1>
       <button
-        className={"text-5xl text-neutral-400"}
-        onClick={async () => {
-          await navigate({ to: "/login" });
-        }}
+        className={"text-5xl text-neutral-400 hover:text-yellow-600"}
+        onClick={() =>
+          Default.test()
+            .then((res) => {
+              if (res.error) {
+                setAuthText("Not Authenticated!");
+              } else {
+                setAuthText(res.data!);
+              }
+            })
+            .catch((_err) => setAuthText("Failed!"))
+        }
       >
-        BACK
+        TEST
       </button>
     </div>
   );
