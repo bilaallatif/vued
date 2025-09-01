@@ -9,6 +9,7 @@ import { App } from "./app.tsx";
 const apiUrl: string = import.meta.env.VITE_API_URL;
 client.setConfig({
   baseUrl: apiUrl,
+  credentials: "include",
 });
 
 const queryClient = new QueryClient();

@@ -1,6 +1,5 @@
 import {
   createRoute,
-  Route,
   useNavigate,
   useRouteContext,
 } from "@tanstack/react-router";
