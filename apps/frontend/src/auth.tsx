@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { Default } from "@vued/sdk/api";
 
-interface AuthState {
+export interface AuthState {
   isAuthenticated: boolean;
   login: (username: string, password: string) => Promise<void>;
 }

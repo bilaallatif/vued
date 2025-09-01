@@ -14,7 +14,6 @@ export const HomeRoute = createRoute({
   path: "home",
   component: Home,
   beforeLoad: ({ context }) => {
-    // @ts-ignore
     if (!context.auth.isAuthenticated) {
       throw redirect({ to: "/login" });
     }
