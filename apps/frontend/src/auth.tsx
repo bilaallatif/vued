@@ -10,28 +10,25 @@ const AuthContext = createContext<AuthState | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [accessToken, setAccessToken] = useState<string | null>(null);
+  const [_accessToken, set_accessToken] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
+  // Attempt to refresh access_token on mount
   useEffect(() => {
-    if (accessToken) {
-      Default.refresh()
-        .then((new_access_token) => {
-          if (new_access_token && new_access_token.data) {
-            setIsAuthenticated(true);
-            setAccessToken(new_access_token.data);
-            setIsLoading(false);
-          }
-        })
-        .catch(() => {
-          console.log("Failed to refresh token");
-        })
-        .finally(() => {
+    Default.refresh()
+      .then((new_access_token) => {
+        if (new_access_token && new_access_token.data) {
+          setIsAuthenticated(true);
+          set_accessToken(new_access_token.data);
           setIsLoading(false);
-        });
-    } else {
-      setIsLoading(false);
-    }
+        }
+      })
+      .catch(() => {
+        console.log("Failed to refresh token");
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
   }, []);
 
   // Show loading state while checking auth
@@ -43,13 +40,14 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     );
   }
 
+  // Request new refresh_token(Http-Cookie) and access_token on login
   const login = async (username: string, password: string) => {
     const new_access_token = await Default.login({
       body: { username, password },
     });
     if (new_access_token && new_access_token.data) {
       setIsAuthenticated(true);
-      setAccessToken(new_access_token.data);
+      set_accessToken(new_access_token.data);
     }
   };
 
