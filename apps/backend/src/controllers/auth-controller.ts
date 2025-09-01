@@ -64,7 +64,7 @@ export class AuthController extends Controller {
       // Return refresh token as HttpOnly cookie
       this.setHeader(
         "Set-Cookie",
-        `refresh_token=${refresh_token}; HttpOnly; path=auth/refresh SameSite=Strict;`,
+        `refresh_token=${refresh_token}; Max-Age=6000; Path=/; HttpOnly; SameSite=None; Secure;`,
       );
 
       // Return the access token
