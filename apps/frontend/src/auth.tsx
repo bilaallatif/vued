@@ -26,6 +26,24 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     return request;
   });
 
+  client.interceptors.response.use((res, req, _opts): Response => {
+    if (res.status == 401) {
+      Default.refresh().then((new_access_token) => {
+        if (new_access_token && new_access_token.data) {
+          console.log("Refreshing token!");
+          setAccessToken(new_access_token.data);
+          const retryReq = new Request(req);
+          retryReq.headers.set(
+            "Authorization",
+            `Bearer ${new_access_token.data}`,
+          );
+          return fetch(retryReq);
+        }
+      });
+    }
+    return res;
+  });
+
   // Attempt to refresh access_token on mount
   useEffect(() => {
     Default.refresh()
