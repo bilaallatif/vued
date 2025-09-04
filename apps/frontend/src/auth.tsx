@@ -1,9 +1,9 @@
 import React, {
   createContext,
   useContext,
-  useState,
   useEffect,
   useRef,
+  useState,
 } from "react";
 import { client } from "@vued/sdk/api/client.gen";
 import { Default } from "@vued/sdk/api";
@@ -55,34 +55,31 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         return request;
       });
 
-      client.interceptors.response.use((res, req, _opts): Response => {
-        // If response is 401 and is not a retry request
-        if (
-          !req.url.endsWith("/refresh") &&
-          res.status == 401 &&
-          req.headers.get("Retry") != "true"
-        ) {
-          // Attempt to refresh access_token
-          Default.refresh()
-            .then((new_access_token) => {
-              if (new_access_token && new_access_token.data) {
-                console.log("Refreshing token!");
-                setAccessToken(new_access_token.data);
-                const retryReq = new Request(req);
-                retryReq.headers.set(
-                  "Authorization",
-                  `Bearer ${new_access_token.data}`,
-                );
-                retryReq.headers.set("Retry", "true");
-                return fetch(retryReq);
-              }
-            })
-            .catch(() => {
-              console.log("Failed refresh!");
-            });
-        }
-        return res;
-      });
+      client.interceptors.response.use(
+        async (res, req, _opts): Promise<Response> => {
+          // If response is 401 and is not a retry request
+          if (
+            !req.url.endsWith("/refresh") &&
+            res.status == 401 &&
+            req.headers.get("Retry") != "true"
+          ) {
+            // Attempt to refresh access_token
+            const new_access_token = await Default.refresh();
+            if (new_access_token.error) console.log("Failed to refresh token");
+
+            console.log("Refreshing token!");
+            setAccessToken(new_access_token.data!);
+            const retryReq = new Request(req);
+            retryReq.headers.set(
+              "Authorization",
+              `Bearer ${new_access_token.data}`,
+            );
+            retryReq.headers.set("Retry", "true");
+            return await fetch(retryReq);
+          }
+          return res;
+        },
+      );
       setup_interceptors_ref.current = true;
     }
 
