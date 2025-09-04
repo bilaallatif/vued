@@ -1,20 +1,33 @@
 import { BaseRoute } from "./components/base.tsx";
 import { LoginRoute } from "./components/login.tsx";
 import { HomeRoute } from "./components/home.tsx";
-import { createRoute, createRouter, redirect } from "@tanstack/react-router";
+import { createRouter } from "@tanstack/react-router";
+import { useEffect } from "react";
 
-const CatchRoute = createRoute({
-  getParentRoute: () => BaseRoute,
-  path: "/",
-  loader: () => {
-    throw redirect({ to: "/home" });
-  },
-});
+// const CatchRoute = createRoute({
+//   getParentRoute: () => BaseRoute,
+//   path: "/*",
+//   loader: () => {
+//     console.log("Catch Route");
+//     throw redirect({ to: "/home" });
+//   },
+// });
 
-const routeTree = BaseRoute.addChildren([CatchRoute, LoginRoute, HomeRoute]);
+const NotFoundRedirect = () => {
+  const navigate = BaseRoute.useNavigate();
+
+  useEffect(() => {
+    navigate({ to: "/home" });
+  }, []);
+
+  return <div>Redirecting...</div>;
+};
+
+const routeTree = BaseRoute.addChildren([LoginRoute, HomeRoute]);
 export const router = createRouter({
   routeTree,
   context: { auth: undefined! },
+  defaultNotFoundComponent: NotFoundRedirect,
 });
 
 declare module "@tanstack/react-router" {
