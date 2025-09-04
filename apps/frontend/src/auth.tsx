@@ -57,9 +57,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
       client.interceptors.response.use(
         async (res, req, _opts): Promise<Response> => {
-          // If response is 401 and is not a retry request
           if (
+            // Don't retry refresh or login requests (since we can be sure the user is unauthenticated)
             !req.url.endsWith("/refresh") &&
+            !req.url.endsWith("/login") &&
+            // If response is 401 and is not a retry request
             res.status == 401 &&
             req.headers.get("Retry") != "true"
           ) {
