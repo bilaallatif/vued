@@ -1,4 +1,4 @@
-import { createRoute } from "@tanstack/react-router";
+import { createRoute, redirect } from "@tanstack/react-router";
 import { BaseRoute } from "./base.tsx";
 import { useState } from "react";
 
@@ -91,4 +91,9 @@ export const LoginRoute = createRoute({
   getParentRoute: () => BaseRoute,
   path: "login",
   component: Login,
+  beforeLoad: ({context}) => {
+    if (context.auth.isAuthenticated) {
+      throw redirect({ to: "/home" });
+    }
+  }
 });
