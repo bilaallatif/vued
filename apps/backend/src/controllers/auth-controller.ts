@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Route, Request, Middlewares } from "tsoa";
+import { Body, Controller, Get, Middlewares, Post, Request, Route } from "tsoa";
 import { User } from "@prisma/client";
 import { AuthService } from "../services/auth-service";
 import { DatabaseError } from "../types/result";
@@ -7,24 +7,37 @@ import jwt, { JwtPayload } from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import { Request as ExRequest } from "express";
 import { authHandler } from "../middleware/authentication";
+import { UserService } from "../services/user-service";
 
 type LoginProps = Pick<User, "username" | "password">;
 
 @Route("/auth")
 export class AuthController extends Controller {
   private readonly loginService: AuthService = new AuthService();
+  private readonly userService: UserService = new UserService();
 
   @Get("test")
   @Middlewares(authHandler)
-  public async test(): Promise<string> {
-    return "Authenticated!";
+  public async test(@Request() req: ExRequest): Promise<string> {
+    const user_id: string = req.res?.locals.userId;
+
+    const user_result = await this.userService.get(user_id);
+    if (!user_result.ok) {
+      switch (user_result.error) {
+        case DatabaseError.NotFound:
+          throw new HttpError(404, "User not found");
+        default:
+          throw new HttpError(500, `Unhandled error type ${user_result.error}`);
+      }
+    }
+
+    return user_result.value.username;
   }
 
   @Get("refresh")
   public async refresh(@Request() req: ExRequest): Promise<string> {
     // Get refresh token from cookies
     const refresh_token = req.cookies.refresh_token;
-    console.log(refresh_token);
     if (!refresh_token) {
       throw new HttpError(401, "Authentication failed");
     }
@@ -67,7 +80,7 @@ export class AuthController extends Controller {
         expiresIn: "15s",
       });
 
-      // Fuck with the path and CORS
+      // todo: Fuck with the path and CORS
       // Return refresh token as HttpOnly cookie
       this.setHeader(
         "Set-Cookie",

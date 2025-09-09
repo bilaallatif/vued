@@ -17,7 +17,7 @@ const Home = () => {
               if (res.error) {
                 setAuthText("Not Authenticated!");
               } else {
-                setAuthText(res.data!);
+                setAuthText(`Hi ${res.data!}!`);
               }
             })
             .catch((_err) => setAuthText("Failed!"))

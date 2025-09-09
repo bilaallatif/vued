@@ -1,5 +1,6 @@
 import { createRoute, redirect } from "@tanstack/react-router";
 import { BaseRoute } from "./base.tsx";
+import { Default } from "@vued/sdk/api";
 import { useState } from "react";
 
 const Login = () => {
@@ -41,6 +42,15 @@ const Login = () => {
               className={
                 "text-neutral-900 text-2xl bg-yellow-600 p-2 rounded-md hover:bg-yellow-500 hover:scale-110 transition-transform duration-200"
               }
+              onClick={async () => {
+                const response = await Default.createUser({
+                  body: { username, password },
+                });
+                if (!response.error) {
+                  await context.auth.login(username, password);
+                  await navigate({ to: "/home" });
+                }
+              }}
             >
               Sign Up
             </button>
@@ -91,9 +101,9 @@ export const LoginRoute = createRoute({
   getParentRoute: () => BaseRoute,
   path: "login",
   component: Login,
-  beforeLoad: ({context}) => {
+  beforeLoad: ({ context }) => {
     if (context.auth.isAuthenticated) {
       throw redirect({ to: "/home" });
     }
-  }
+  },
 });

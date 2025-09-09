@@ -13,4 +13,5 @@ export const ERR = <E>(error?: E): Result<never, E> => ({
 
 export enum DatabaseError {
   NotFound = "NotFound",
+  NotCreated = "NotCreated",
 }

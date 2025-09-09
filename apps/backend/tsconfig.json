@@ -32,7 +32,8 @@
     // emitDecoratorMetadata is not needed by tsoa (unless you are using Custom Middlewares)
 
     /* Advanced Options */
-    "forceConsistentCasingInFileNames": true
+    "forceConsistentCasingInFileNames": true,
+    "sourceMap": true,
   },
   "include": ["src/**/*"]
 }
