@@ -1,6 +1,6 @@
 import { BaseRoute } from "./components/base.tsx";
-import { LoginRoute } from "./components/login.tsx";
-import { HomeRoute } from "./components/home.tsx";
+import { LoginRoute } from "./components/components/login.tsx";
+import { HomeRoute } from "./components/components/home.tsx";
 import { createRouter } from "@tanstack/react-router";
 import { useEffect } from "react";
 

@@ -1,5 +1,5 @@
 import { createRoute, redirect } from "@tanstack/react-router";
-import { BaseRoute } from "./base.tsx";
+import { BaseRoute } from "../base.tsx";
 import { Default } from "@vued/sdk/api";
 import { useState } from "react";
 
