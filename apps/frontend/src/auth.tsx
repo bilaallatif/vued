@@ -7,6 +7,7 @@ import React, {
 } from "react";
 import { client } from "@vued/sdk/api/client.gen";
 import { Default } from "@vued/sdk/api";
+import { router } from "./router.tsx";
 
 export interface AuthState {
   isAuthenticated: boolean;
@@ -67,17 +68,25 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           ) {
             // Attempt to refresh access_token
             const new_access_token = await Default.refresh();
-            if (new_access_token.error) console.log("Failed to refresh token");
 
-            console.log("Refreshing token!");
-            setAccessToken(new_access_token.data!);
-            const retryReq = new Request(req);
-            retryReq.headers.set(
-              "Authorization",
-              `Bearer ${new_access_token.data}`,
-            );
-            retryReq.headers.set("Retry", "true");
-            return await fetch(retryReq);
+            // If refresh fails, we should un-authenticate the user
+            if (new_access_token.error) {
+              console.log("Failed to refresh token");
+              setIsAuthenticated(false);
+              setAccessToken(null);
+            }
+            // If refresh succeeds, we should update the access_token and retry the request
+            else {
+              console.log("Refreshing token!");
+              setAccessToken(new_access_token.data!);
+              const retryReq = new Request(req);
+              retryReq.headers.set(
+                "Authorization",
+                `Bearer ${new_access_token.data}`,
+              );
+              retryReq.headers.set("Retry", "true");
+              return await fetch(retryReq);
+            }
           }
           return res;
         },
@@ -103,6 +112,14 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       console.log("Cleaning up for id:", id);
     };
   }, []);
+
+  // Invalidate router if user becomes unauthenticated
+  // Since beforeLoad has a snapshot of isAuthenticated before it's set to false
+  useEffect(() => {
+    if (!isAuthenticated) {
+      router.invalidate();
+    }
+  }, [isAuthenticated]);
 
   // Show loading state while checking auth
   if (isLoading) {
