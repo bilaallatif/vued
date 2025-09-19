@@ -28,9 +28,15 @@ const BaseAuthenticated = () => {
           "w-full flex flex-row justify-start items-center gap-10 bg-neutral-100/5 py-5 px-10 after:content-[''] after:flex-1"
         }
       >
-        <div className={"flex-1 text-yellow-600 font-bold text-5xl"}>VUE'D</div>
         <div
-          className={"flex-1 flex flex-row justify-center items-center gap-10"}
+          className={"animate-slide flex-1 text-yellow-600 font-bold text-5xl"}
+        >
+          VUE'D
+        </div>
+        <div
+          className={
+            "animate-fade flex-1 flex flex-row justify-center items-center gap-10"
+          }
         >
           <NavbarLink to={"/home"} text={"Home"} />
           <NavbarLink to={"/users"} text={"Users"} />
