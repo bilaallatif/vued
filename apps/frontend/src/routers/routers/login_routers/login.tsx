@@ -1,7 +1,8 @@
 import { createRoute, redirect } from "@tanstack/react-router";
-import { BaseRoute } from "../base.tsx";
+import { BaseRoute } from "../../base.tsx";
 import { Default } from "@vued/sdk/api";
 import { useState } from "react";
+import { LoginLayoutRoute } from "../login_base.tsx";
 
 const Login = () => {
   const context = BaseRoute.useRouteContext();
@@ -98,7 +99,7 @@ const FormInput = ({
 };
 
 export const LoginRoute = createRoute({
-  getParentRoute: () => BaseRoute,
+  getParentRoute: () => LoginLayoutRoute,
   path: "login",
   component: Login,
   beforeLoad: ({ context }) => {

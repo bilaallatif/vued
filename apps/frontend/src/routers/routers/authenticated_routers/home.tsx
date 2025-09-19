@@ -1,7 +1,7 @@
 import { createRoute } from "@tanstack/react-router";
 import { Default } from "@vued/sdk/api";
 import { useState } from "react";
-import { NavbarRoute } from "../navbar.tsx";
+import { AuthenticatedLayoutRoute } from "../authenticated_base.tsx";
 
 const Home = () => {
   const [authText, setAuthText] = useState<string>("Pre Test");
@@ -30,7 +30,7 @@ const Home = () => {
 };
 
 export const HomeRoute = createRoute({
-  getParentRoute: () => NavbarRoute,
+  getParentRoute: () => AuthenticatedLayoutRoute,
   path: "home",
   component: Home,
 });

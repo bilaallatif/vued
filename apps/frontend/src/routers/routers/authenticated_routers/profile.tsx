@@ -1,5 +1,5 @@
 import { createRoute } from "@tanstack/react-router";
-import { NavbarRoute } from "../navbar.tsx";
+import { AuthenticatedLayoutRoute } from "../authenticated_base.tsx";
 
 const Profile = () => {
   return (
@@ -10,7 +10,7 @@ const Profile = () => {
 };
 
 export const ProfileRoute = createRoute({
-  getParentRoute: () => NavbarRoute,
+  getParentRoute: () => AuthenticatedLayoutRoute,
   path: "profile",
   component: Profile,
 });

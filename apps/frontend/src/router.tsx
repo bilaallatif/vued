@@ -1,11 +1,12 @@
 import { BaseRoute } from "./routers/base.tsx";
-import { LoginRoute } from "./routers/routers/login.tsx";
-import { HomeRoute } from "./routers/routers/routers/home.tsx";
+import { LoginRoute } from "./routers/routers/login_routers/login.tsx";
+import { HomeRoute } from "./routers/routers/authenticated_routers/home.tsx";
 import { createRouter } from "@tanstack/react-router";
 import { useEffect } from "react";
-import { NavbarRoute } from "./routers/routers/navbar.tsx";
-import { UsersRoute } from "./routers/routers/routers/users.tsx";
-import { ProfileRoute } from "./routers/routers/routers/profile.tsx";
+import { AuthenticatedLayoutRoute } from "./routers/routers/authenticated_base.tsx";
+import { UsersRoute } from "./routers/routers/authenticated_routers/users.tsx";
+import { ProfileRoute } from "./routers/routers/authenticated_routers/profile.tsx";
+import { LoginLayoutRoute } from "./routers/routers/login_base.tsx";
 
 const NotFoundRedirect = () => {
   const navigate = BaseRoute.useNavigate();
@@ -18,8 +19,8 @@ const NotFoundRedirect = () => {
 };
 
 const routeTree = BaseRoute.addChildren([
-  LoginRoute,
-  NavbarRoute.addChildren([HomeRoute, UsersRoute, ProfileRoute]),
+  LoginLayoutRoute.addChildren([LoginRoute]),
+  AuthenticatedLayoutRoute.addChildren([HomeRoute, UsersRoute, ProfileRoute]),
 ]);
 export const router = createRouter({
   routeTree,

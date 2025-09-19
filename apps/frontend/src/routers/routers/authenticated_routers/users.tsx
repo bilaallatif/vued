@@ -1,5 +1,5 @@
 import { createRoute } from "@tanstack/react-router";
-import { NavbarRoute } from "../navbar.tsx";
+import { AuthenticatedLayoutRoute } from "../authenticated_base.tsx";
 
 const Users = () => {
   return (
@@ -10,7 +10,7 @@ const Users = () => {
 };
 
 export const UsersRoute = createRoute({
-  getParentRoute: () => NavbarRoute,
+  getParentRoute: () => AuthenticatedLayoutRoute,
   path: "users",
   component: Users,
 });
