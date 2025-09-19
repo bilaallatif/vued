@@ -27,11 +27,13 @@ const BaseAuthenticated = () => {
       <div
         // Adding artificial space to center navbar
         className={
-          "w-full flex flex-row justify-start items-center gap-10 bg-neutral-100/5 py-5 px-10"
+          "w-full flex flex-row items-center gap-10 bg-neutral-100/5 py-5 px-10"
         }
       >
         <div
-          className={"animate-slide flex-1 text-yellow-600 font-bold text-5xl"}
+          className={
+            "animate-slide flex-1 text-yellow-600 tracking-widest font-bold text-5xl flex justify-start"
+          }
         >
           VUE'D
         </div>
