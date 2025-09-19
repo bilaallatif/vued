@@ -91,4 +91,13 @@ export class AuthController extends Controller {
       return access_token;
     }
   }
+
+  @Get("logout")
+  public async logout(): Promise<void> {
+    // Remove refresh toke HttpOnly cookie
+    this.setHeader(
+      "Set-Cookie",
+      "refresh_token=; Max-Age=0; Path=/; HttpOnly; SameSite=None; Secure;",
+    );
+  }
 }

@@ -12,6 +12,7 @@ import { router } from "./router.tsx";
 export interface AuthState {
   isAuthenticated: boolean;
   login: (username: string, password: string) => Promise<void>;
+  logout: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthState | undefined>(undefined);
@@ -141,8 +142,20 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
+  const logout = async () => {
+    // Send logout request to server
+    // Should remove refresh_token(Http-Cookie)
+    await Default.logout();
+
+    // Clear access_token
+    setAccessToken(null);
+
+    // Un-authenticate user
+    setIsAuthenticated(false);
+  };
+
   return (
-    <AuthContext.Provider value={{ isAuthenticated, login }}>
+    <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

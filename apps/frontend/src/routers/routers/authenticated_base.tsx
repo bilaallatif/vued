@@ -20,12 +20,14 @@ const NavbarLink = ({ to, text }: NavbarLinkProps) => {
 };
 
 const BaseAuthenticated = () => {
+  const context = BaseRoute.useRouteContext();
+
   return (
     <BaseLayout>
       <div
         // Adding artificial space to center navbar
         className={
-          "w-full flex flex-row justify-start items-center gap-10 bg-neutral-100/5 py-5 px-10 after:content-[''] after:flex-1"
+          "w-full flex flex-row justify-start items-center gap-10 bg-neutral-100/5 py-5 px-10"
         }
       >
         <div
@@ -41,6 +43,20 @@ const BaseAuthenticated = () => {
           <NavbarLink to={"/home"} text={"Home"} />
           <NavbarLink to={"/users"} text={"Users"} />
           <NavbarLink to={"/profile"} text={"Profile"} />
+        </div>
+        <div
+          className={
+            "animate-fade flex-1 text-yellow-600 text-3xl flex justify-end"
+          }
+        >
+          <button
+            onClick={async () => {
+              await context.auth.logout();
+            }}
+            className={"hover:text-yellow-500"}
+          >
+            Logout
+          </button>
         </div>
       </div>
     </BaseLayout>
