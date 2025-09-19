@@ -11,7 +11,9 @@ const NavbarLink = ({ to, text }: NavbarLinkProps) => {
   return (
     <Link
       to={to}
-      className={"text-yellow-600 text-3xl"}
+      className={
+        "text-yellow-600 hover:text-yellow-500 text-3xl hover:scale-110 transition-transform duration-200"
+      }
       activeProps={{ className: "!text-yellow-500" }}
     >
       {text}
@@ -55,7 +57,9 @@ const BaseAuthenticated = () => {
             onClick={async () => {
               await context.auth.logout();
             }}
-            className={"hover:text-yellow-500"}
+            className={
+              "hover:text-yellow-500 hover:scale-110 transition-transform duration-200"
+            }
           >
             Logout
           </button>
