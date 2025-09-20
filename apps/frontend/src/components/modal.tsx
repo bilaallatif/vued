@@ -14,7 +14,7 @@ export const Modal = ({
   return (
     <div
       className={
-        "fixed inset-50 flex items-center justify-center bg-neutral-800 rounded-md animate-fade-quick"
+        "fixed inset-50 flex flex-col items-center justify-start py-10 bg-neutral-800 rounded-md animate-fade-quick"
       }
     >
       <button
