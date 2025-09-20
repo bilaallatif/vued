@@ -41,12 +41,13 @@ const BaseAuthenticated = () => {
         </div>
         <div
           className={
-            "animate-fade flex-1 flex flex-row justify-center items-center gap-10"
+            "animate-fade flex-1 flex flex-row justify-center items-center gap-15"
           }
         >
           <NavbarLink to={"/home"} text={"Home"} />
           <NavbarLink to={"/users"} text={"Users"} />
           <NavbarLink to={"/profile"} text={"Profile"} />
+          <NavbarLink to={"/test"} text={"Test"} />
         </div>
         <div
           className={
