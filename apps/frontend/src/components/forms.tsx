@@ -1,3 +1,6 @@
+// Rare use of Material UI
+import Rating from "@mui/material/Rating";
+
 export interface FormInputProps {
   type?: string;
   name: string;
@@ -28,15 +31,32 @@ export const FormInput = ({
 
 export const FormTextArea = ({ name, value, setValue }: FormInputProps) => {
   return (
-    <label className={"text-2xl text-neutral-400 flex flex-col gap-2"}>
+    <label className={"text-2xl h-full text-neutral-400 flex flex-col gap-2"}>
       {name}
       <textarea
         className={
-          "block bg-neutral-100/5 rounded-md focus:outline-2 focus:outline-yellow-600 px-2"
+          "block bg-neutral-100/5 rounded-md focus:outline-2 focus:outline-yellow-600 px-2 h-full"
         }
         value={value}
         onChange={(e) => setValue(e.target.value)}
       />
+    </label>
+  );
+};
+
+export const FormRating = ({ name }: { name: string }) => {
+  return (
+    <label
+      className={"text-2xl text-neutral-400 flex flex-row items-center gap-10"}
+    >
+      {name}
+      <div
+        className={
+          "flex items-center justify-center bg-neutral-100/5 rounded-md p-2"
+        }
+      >
+        <Rating name={"rating"} defaultValue={0} precision={0.5} size="large" />
+      </div>
     </label>
   );
 };

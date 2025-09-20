@@ -3,7 +3,11 @@ import { AuthenticatedLayoutRoute } from "../authenticated_base.tsx";
 import { useState } from "react";
 import { Modal } from "../../../components/modal.tsx";
 import { BasicButton } from "../../../components/buttons.tsx";
-import { FormInput, FormTextArea } from "../../../components/forms.tsx";
+import {
+  FormInput,
+  FormRating,
+  FormTextArea,
+} from "../../../components/forms.tsx";
 
 const NewReviewModal = ({
   isOpen,
@@ -32,7 +36,7 @@ const NewReviewModal = ({
           value={description}
           setValue={setDescription}
         />
-        <div className={"text-3xl text-neutral-400"}>Rating</div>
+        <FormRating name={"Rating"} />
       </div>
       <BasicButton text={"Submit"} />
     </Modal>
