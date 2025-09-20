@@ -7,3 +7,5 @@
 * `pnpm --filter frontend build` - build static site
 * `pnpm --filter frontend dev` - start dev server
 * `pnpm --filter frontend preview` - preview prod build
+
+Testing branch protection
