@@ -3,6 +3,7 @@ import { BaseRoute } from "../../base.tsx";
 import { Default } from "@vued/sdk/api";
 import { useState } from "react";
 import { LoginLayoutRoute } from "../login_base.tsx";
+import { BasicButton } from "../../../components/button.tsx";
 
 const Login = () => {
   const context = BaseRoute.useRouteContext();
@@ -27,22 +28,16 @@ const Login = () => {
               setValue={setPassword}
             />
           </div>
+
           <div className={"flex flex-row justify-start w-full gap-5"}>
-            <button
-              className={
-                "text-neutral-900 text-2xl bg-yellow-600 p-2 rounded-md hover:bg-yellow-500 hover:scale-110 transition-transform duration-200"
-              }
+            <BasicButton
               onClick={async () => {
                 await context.auth.login(username, password);
                 await navigate({ to: "/home" });
               }}
-            >
-              Log In
-            </button>
-            <button
-              className={
-                "text-neutral-900 text-2xl bg-yellow-600 p-2 rounded-md hover:bg-yellow-500 hover:scale-110 transition-transform duration-200"
-              }
+              text={"Login"}
+            />
+            <BasicButton
               onClick={async () => {
                 const response = await Default.createUser({
                   body: { username, password },
@@ -52,9 +47,8 @@ const Login = () => {
                   await navigate({ to: "/home" });
                 }
               }}
-            >
-              Sign Up
-            </button>
+              text={"Sign Up"}
+            />
           </div>
         </div>
       </div>

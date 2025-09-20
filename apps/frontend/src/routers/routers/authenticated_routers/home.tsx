@@ -2,6 +2,7 @@ import { createRoute } from "@tanstack/react-router";
 import { AuthenticatedLayoutRoute } from "../authenticated_base.tsx";
 import { useState } from "react";
 import { Modal } from "../../../components/modal.tsx";
+import { BasicButton } from "../../../components/button.tsx";
 
 const NewReviewModal = ({
   isOpen,
@@ -12,13 +13,13 @@ const NewReviewModal = ({
 }) => {
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
-      <div className={"flex flex-col items-center gap-10"}>
-        <div className={"text-5xl text-yellow-600"}>New Review</div>
-        <div className={"text-5xl text-yellow-600"}>Title</div>
-        <div className={"text-5xl text-yellow-600"}>Description</div>
-        <div className={"text-5xl text-yellow-600"}>Rating</div>
-        <div className={"text-5xl text-yellow-600"}>Submit</div>
+      <div className={"text-5xl text-neutral-400"}>New Review</div>
+      <div className={"flex-1 flex flex-col items-center gap-10 py-5"}>
+        <div className={"text-5xl text-neutral-400"}>Title</div>
+        <div className={"text-5xl text-neutral-400"}>Description</div>
+        <div className={"text-5xl text-neutral-400"}>Rating</div>
       </div>
+      <BasicButton text={"Submit"} />
     </Modal>
   );
 };
@@ -28,14 +29,10 @@ const Home = () => {
 
   return (
     <div className={"w-full h-full flex flex-col items-center justify-center"}>
-      <button
-        className={
-          "text-neutral-900 text-2xl bg-yellow-600 p-2 rounded-md hover:bg-yellow-500 hover:scale-110 transition-transform duration-200"
-        }
+      <BasicButton
         onClick={() => setIsNewReviewOpen(true)}
-      >
-        New Review
-      </button>
+        text={"New Review"}
+      />
       <NewReviewModal
         isOpen={isNewReviewOpen}
         onClose={() => setIsNewReviewOpen(false)}
