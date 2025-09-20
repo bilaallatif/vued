@@ -22,4 +22,6 @@
             opacity: 1;
         }
     }
+
+    --animate-fade-quick: fade 0.25s ease-in-out 1;
 }
