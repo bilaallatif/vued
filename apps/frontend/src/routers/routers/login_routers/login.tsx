@@ -3,7 +3,8 @@ import { BaseRoute } from "../../base.tsx";
 import { Default } from "@vued/sdk/api";
 import { useState } from "react";
 import { LoginLayoutRoute } from "../login_base.tsx";
-import { BasicButton } from "../../../components/button.tsx";
+import { BasicButton } from "../../../components/buttons.tsx";
+import { FormInput } from "../../../components/forms.tsx";
 
 const Login = () => {
   const context = BaseRoute.useRouteContext();
@@ -61,34 +62,6 @@ const Login = () => {
         <p>Screenplay by Bilaal Latif</p>
       </div>
     </div>
-  );
-};
-
-export interface FormInputProps {
-  type?: string;
-  name: string;
-  value: string;
-  setValue: (value: string) => void;
-}
-
-const FormInput = ({
-  type = "text",
-  name,
-  value,
-  setValue,
-}: FormInputProps) => {
-  return (
-    <label className={"text-2xl text-neutral-400 flex flex-col gap-2"}>
-      {name}
-      <input
-        className={
-          "block bg-neutral-100/5 rounded-md focus:outline-2 focus:outline-yellow-600 px-2"
-        }
-        type={type}
-        value={value}
-        onChange={(e) => setValue(e.target.value)}
-      />
-    </label>
   );
 };
 
