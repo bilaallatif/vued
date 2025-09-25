@@ -1,9 +1,13 @@
 import { Controller, Get, Query, Route } from "tsoa";
 import { Movie, TmdbService } from "../services/tmdb-service";
+import { injectable } from "inversify";
 
+@injectable()
 @Route("/movie")
 export class MovieController extends Controller {
-  private readonly tmdbService: TmdbService = new TmdbService();
+  constructor(private readonly tmdbService: TmdbService) {
+    super();
+  }
 
   @Get()
   public async getMovie(@Query() title: string): Promise<Movie[]> {

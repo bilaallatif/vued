@@ -23,6 +23,7 @@ import config from "./src/config/config";
     entryFile: "src/app.ts",
     controllerPathGlobs: ["src/**/*-controller.ts"],
     routesDir: "build",
+    iocModule: "src/ioc",
     bodyCoercion: false,
   };
 

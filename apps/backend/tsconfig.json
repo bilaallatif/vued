@@ -2,7 +2,7 @@
   "compilerOptions": {
     /* Basic Options */
     "incremental": true,
-    "target": "es6",
+    "target": "es2022",
     "module": "commonjs",
     "outDir": "dist",
 
@@ -29,6 +29,7 @@
 
     /* Experimental Options */
     "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
     // emitDecoratorMetadata is not needed by tsoa (unless you are using Custom Middlewares)
 
     /* Advanced Options */

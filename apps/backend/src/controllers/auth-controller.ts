@@ -8,13 +8,19 @@ import bcrypt from "bcryptjs";
 import { Request as ExRequest } from "express";
 import { authHandler } from "../middleware/authentication";
 import { UserService } from "../services/user-service";
+import { injectable } from "inversify";
 
 type LoginProps = Pick<User, "username" | "password">;
 
+@injectable()
 @Route("/auth")
 export class AuthController extends Controller {
-  private readonly loginService: AuthService = new AuthService();
-  private readonly userService: UserService = new UserService();
+  constructor(
+    private readonly userService: UserService,
+    private readonly authService: AuthService,
+  ) {
+    super();
+  }
 
   @Get("test")
   @Middlewares(authHandler)
@@ -54,7 +60,7 @@ export class AuthController extends Controller {
   @Post("login")
   public async login(@Body() requestBody: LoginProps): Promise<string> {
     // Get user from username
-    const user_result = await this.loginService.get(requestBody.username);
+    const user_result = await this.authService.get(requestBody.username);
     if (!user_result.ok) {
       switch (user_result.error) {
         case DatabaseError.NotFound:

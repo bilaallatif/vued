@@ -1,10 +1,12 @@
 import config from "../config/config";
+import { injectable } from "inversify";
 
 export type Movie = {
   id: number;
   title: string;
 };
 
+@injectable()
 export class TmdbService {
   public async getMovie(title: string): Promise<Movie[]> {
     const url = new URL("https://api.themoviedb.org/3/search/movie");

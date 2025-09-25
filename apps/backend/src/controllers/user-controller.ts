@@ -2,12 +2,16 @@ import { Body, Controller, Post, Route, SuccessResponse } from "tsoa";
 import { UserService } from "../services/user-service";
 import { User } from "@prisma/client";
 import { HttpError } from "../types/exceptions";
+import { injectable } from "inversify";
 
 export type UserCreationProps = Pick<User, "username" | "password">;
 
+@injectable()
 @Route("/user")
 export class UserController extends Controller {
-  private readonly userService: UserService = new UserService();
+  constructor(private readonly userService: UserService) {
+    super();
+  }
 
   @SuccessResponse("201", "Created")
   @Post()
