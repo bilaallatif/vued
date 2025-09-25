@@ -1,10 +1,10 @@
 import { Prisma, PrismaClient, User } from "@prisma/client";
 import { DatabaseError, ERR, OK, Result } from "../types/result";
-import { injectable } from "inversify";
+import { inject, injectable } from "inversify";
 
 @injectable()
 export class AuthService {
-  constructor(private db_client: PrismaClient) {}
+  constructor(@inject(PrismaClient) private db_client: PrismaClient) {}
 
   public async get(username: string): Promise<Result<User, DatabaseError>> {
     const user_where: Prisma.UserWhereUniqueInput = { username: username };

@@ -1,11 +1,11 @@
 import { Controller, Get, Query, Route } from "tsoa";
 import { Movie, TmdbService } from "../services/tmdb-service";
-import { injectable } from "inversify";
+import { inject, injectable } from "inversify";
 
 @injectable()
 @Route("/movie")
 export class MovieController extends Controller {
-  constructor(private readonly tmdbService: TmdbService) {
+  constructor(@inject(TmdbService) private readonly tmdbService: TmdbService) {
     super();
   }
 

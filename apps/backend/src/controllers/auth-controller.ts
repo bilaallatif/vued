@@ -8,7 +8,7 @@ import bcrypt from "bcryptjs";
 import { Request as ExRequest } from "express";
 import { authHandler } from "../middleware/authentication";
 import { UserService } from "../services/user-service";
-import { injectable } from "inversify";
+import { injectable, inject } from "inversify";
 
 type LoginProps = Pick<User, "username" | "password">;
 
@@ -16,7 +16,9 @@ type LoginProps = Pick<User, "username" | "password">;
 @Route("/auth")
 export class AuthController extends Controller {
   constructor(
+    @inject(UserService)
     private readonly userService: UserService,
+    @inject(AuthService)
     private readonly authService: AuthService,
   ) {
     super();
