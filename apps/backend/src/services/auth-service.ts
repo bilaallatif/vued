@@ -11,6 +11,6 @@ export class AuthService {
     const user = await this.db_client.user.findUnique({
       where: user_where,
     });
-    return user ? OK(user) : ERR(DatabaseError.NotFound);
+    return user ? OK(user) : ERR(DatabaseError.NOT_FOUND);
   }
 }

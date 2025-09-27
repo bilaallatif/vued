@@ -10,13 +10,20 @@ export class UserService {
 
   public async get(id: string): Promise<Result<User, DatabaseError>> {
     const user = await this.db_client.user.findUnique({ where: { id: id } });
-    return user ? OK(user) : ERR(DatabaseError.NotFound);
+    return user ? OK(user) : ERR(DatabaseError.NOT_FOUND);
   }
 
   public async create({
     username,
     password,
   }: UserCreationProps): Promise<Result<User, DatabaseError>> {
+    const existing_user = await this.db_client.user.findUnique({
+      where: { username: username },
+    });
+    if (existing_user) {
+      return ERR(DatabaseError.COLLISION);
+    }
+
     const user = await this.db_client.user.create({
       data: {
         username: username,
@@ -24,6 +31,6 @@ export class UserService {
       },
     });
 
-    return user ? OK(user) : ERR(DatabaseError.NotCreated);
+    return user ? OK(user) : ERR(DatabaseError.NOT_CREATED);
   }
 }

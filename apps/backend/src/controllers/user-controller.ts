@@ -3,6 +3,7 @@ import { UserService } from "../services/user-service";
 import { User } from "@prisma/client";
 import { HttpError } from "../types/exceptions";
 import { inject, injectable } from "inversify";
+import { DatabaseError } from "../types/result";
 
 export type UserCreationProps = Pick<User, "username" | "password">;
 
@@ -21,6 +22,8 @@ export class UserController extends Controller {
     const user_result = await this.userService.create(requestBody);
     if (!user_result.ok) {
       switch (user_result.error) {
+        case DatabaseError.COLLISION:
+          throw new HttpError(409, "Username already exists");
         default:
           throw new HttpError(500, `Unhandled error type ${user_result.error}`);
       }

@@ -32,7 +32,7 @@ export class AuthController extends Controller {
     const user_result = await this.userService.get(user_id);
     if (!user_result.ok) {
       switch (user_result.error) {
-        case DatabaseError.NotFound:
+        case DatabaseError.NOT_FOUND:
           throw new HttpError(404, "User not found");
         default:
           throw new HttpError(500, `Unhandled error type ${user_result.error}`);
@@ -65,7 +65,7 @@ export class AuthController extends Controller {
     const user_result = await this.authService.get(requestBody.username);
     if (!user_result.ok) {
       switch (user_result.error) {
-        case DatabaseError.NotFound:
+        case DatabaseError.NOT_FOUND:
           throw new HttpError(401, "Authentication failed");
         default:
           throw new HttpError(500, `Unhandled error type ${user_result.error}`);
