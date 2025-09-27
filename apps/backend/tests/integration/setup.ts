@@ -1,0 +1,40 @@
+import { afterAll, beforeAll } from "vitest";
+import {
+  PostgreSqlContainer,
+  StartedPostgreSqlContainer,
+} from "@testcontainers/postgresql";
+import config from "../../src/config/config";
+import { execa } from "execa";
+
+let db_container: StartedPostgreSqlContainer;
+
+beforeAll(async () => {
+  // Spin up container for database
+  db_container = await new PostgreSqlContainer("postgres:13.3-alpine")
+    .withEnvironment({
+      POSTGRES_PASSWORD: "test",
+      POSTGRES_USER: "test",
+      POSTGRES_DB: "test",
+    })
+    .withExposedPorts(5432)
+    .start();
+
+  // Find mapped port for internal postgres port
+  const mapped_port = db_container.getMappedPort(5432);
+  // Construct database url
+  const db_url = `postgresql://test:test@localhost:${mapped_port}/test`;
+
+  // Execute schema migration
+  await execa("npx", ["prisma", "migrate", "deploy"], {
+    env: { DATABASE_URL: db_url },
+  });
+
+  // Update db_url in config
+  // This should apply to app consuming module level config
+  config.db_url = `postgresql://test:test@localhost:${mapped_port}/test`;
+});
+
+afterAll(async () => {
+  // Drop container
+  await db_container.stop();
+});
