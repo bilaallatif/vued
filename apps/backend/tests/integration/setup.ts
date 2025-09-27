@@ -1,4 +1,4 @@
-import { afterAll, beforeAll } from "vitest";
+import { afterEach, beforeEach } from "vitest";
 import {
   PostgreSqlContainer,
   StartedPostgreSqlContainer,
@@ -8,7 +8,8 @@ import { execa } from "execa";
 
 let db_container: StartedPostgreSqlContainer;
 
-beforeAll(async () => {
+// todo: should make this beforeAll s.t. we can instead use transactions
+beforeEach(async () => {
   // Spin up container for database
   db_container = await new PostgreSqlContainer("postgres:13.3-alpine")
     .withEnvironment({
@@ -25,7 +26,7 @@ beforeAll(async () => {
   const db_url = `postgresql://test:test@localhost:${mapped_port}/test`;
 
   // Execute schema migration
-  await execa("npx", ["prisma", "migrate", "deploy"], {
+  await execa("npx prisma migrate deploy", {
     env: { DATABASE_URL: db_url },
   });
 
@@ -34,7 +35,7 @@ beforeAll(async () => {
   config.db_url = `postgresql://test:test@localhost:${mapped_port}/test`;
 });
 
-afterAll(async () => {
+afterEach(async () => {
   // Drop container
   await db_container.stop();
 });

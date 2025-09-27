@@ -15,3 +15,10 @@ test("POST /user creates a user and returns 201", async () => {
   expect(parsed_body).toHaveProperty("password");
   expect(parsed_body).toHaveProperty("id");
 });
+
+test("Check", async () => {
+  const res = await request(app)
+    .post("/user")
+    .send({ username: "bilaal", password: "test" } as UserCreationProps);
+  expect(res.status).toBe(201);
+});

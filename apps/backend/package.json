@@ -10,6 +10,9 @@
     "test": "vitest --config vitest.cofig.ts",
     "format": "prisma format --schema prisma/schema.prisma"
   },
+  "prisma": {
+    "schema": "prisma/schema.prisma"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",

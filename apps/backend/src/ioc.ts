@@ -13,11 +13,12 @@ import { TestController } from "./controllers/test-controller";
 const iocContainer: Container = new Container();
 
 // ~~Controllers~~
+// Currently all transient due to tests (need to rebind PrismClient for every new testcontainer)
 
-iocContainer.bind(TestController).toSelf().inSingletonScope();
-iocContainer.bind(AuthController).toSelf().inSingletonScope();
-iocContainer.bind(MovieController).toSelf().inSingletonScope();
-iocContainer.bind(UserController).toSelf().inSingletonScope();
+iocContainer.bind(TestController).toSelf().inTransientScope();
+iocContainer.bind(AuthController).toSelf().inTransientScope();
+iocContainer.bind(MovieController).toSelf().inTransientScope();
+iocContainer.bind(UserController).toSelf().inTransientScope();
 
 // ~~~Services~~~
 
@@ -32,15 +33,15 @@ iocContainer
         },
       }),
   )
-  .inSingletonScope();
+  .inTransientScope();
 
 // Inject UserService
 export const ServiceIdentifiers = {
   IUserService: Symbol.for("IUserService"),
 };
 
-iocContainer.bind(AuthService).toSelf().inSingletonScope();
-iocContainer.bind(TmdbService).toSelf().inSingletonScope();
-iocContainer.bind(UserService).toSelf().inSingletonScope();
+iocContainer.bind(AuthService).toSelf().inTransientScope();
+iocContainer.bind(TmdbService).toSelf().inTransientScope();
+iocContainer.bind(UserService).toSelf().inTransientScope();
 
 export { iocContainer };
