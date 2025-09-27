@@ -1,8 +1,17 @@
 version: "3.9"
+
 services:
-  backend:
-    build: .
-    container_name: backend
-    ports:
-      - "80:3000"
+  database:
+    image: postgres:13.3
     restart: always
+    environment:
+      POSTGRES_USER: "test"
+      POSTGRES_PASSWORD: "test"
+      POSTGRES_DB: "test"
+    ports:
+      - "5432:5432"
+    volumes:
+      - db:/data/postgres
+
+volumes:
+  db:
