@@ -7,3 +7,9 @@ export class HttpError extends Error {
     this.message = message;
   }
 }
+
+export class Rollback extends Error {
+  constructor() {
+    super("ROLLBACK_ONLY");
+  }
+}

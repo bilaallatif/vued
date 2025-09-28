@@ -1,4 +1,4 @@
-import { afterEach, beforeEach } from "vitest";
+import { beforeAll, afterAll } from "vitest";
 import {
   PostgreSqlContainer,
   StartedPostgreSqlContainer,
@@ -9,7 +9,7 @@ import { execaCommand } from "execa";
 let db_container: StartedPostgreSqlContainer;
 
 // todo: should make this beforeAll s.t. we can instead use transactions
-beforeEach(async () => {
+beforeAll(async () => {
   // Spin up container for database
   db_container = await new PostgreSqlContainer("postgres:13.3-alpine")
     .withEnvironment({
@@ -35,7 +35,7 @@ beforeEach(async () => {
   config.db_url = `postgresql://test:test@localhost:${mapped_port}/test`;
 }, 100000);
 
-afterEach(async () => {
+afterAll(async () => {
   // Drop container
   await db_container.stop();
 });

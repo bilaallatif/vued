@@ -1,4 +1,4 @@
-import { PrismaClient, User } from "@prisma/client";
+import { PrismaClient, Prisma, User } from "@prisma/client";
 import { DatabaseError, ERR, OK, Result } from "../types/result";
 import bcrypt from "bcryptjs";
 import { UserCreationProps } from "../controllers/user-controller";
@@ -6,7 +6,10 @@ import { inject, injectable } from "inversify";
 
 @injectable()
 export class UserService {
-  constructor(@inject(PrismaClient) private db_client: PrismaClient) {}
+  constructor(
+    @inject("DB_CLIENT")
+    private db_client: PrismaClient | Prisma.TransactionClient,
+  ) {}
 
   public async get(id: string): Promise<Result<User, DatabaseError>> {
     const user = await this.db_client.user.findUnique({ where: { id: id } });

@@ -24,7 +24,7 @@ iocContainer.bind(UserController).toSelf().inTransientScope();
 
 // Inject prisma client
 iocContainer
-  .bind(PrismaClient)
+  .bind("DB_CLIENT")
   .toDynamicValue(
     () =>
       new PrismaClient({
