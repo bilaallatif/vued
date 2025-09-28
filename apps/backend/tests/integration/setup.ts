@@ -1,4 +1,4 @@
-import { beforeAll, afterAll, beforeEach, afterEach } from "vitest";
+import { beforeAll, afterAll, beforeEach, afterEach, vi } from "vitest";
 import {
   PostgreSqlContainer,
   StartedPostgreSqlContainer,
@@ -73,6 +73,11 @@ beforeEach(async () => {
      * IMPORTANT: Due to DI might fail in parallel (since DB_CLIENT is rebound repeatedly)
      * This could be solved by using a different DI container for each test (would need access to test container before test starts)
      * Would also need to bind container at runtime (which is not how TSOA resolves container)
+     *
+     * After some research:
+     * - Tests in same files run concurrently (parallelism isn't possible)
+     * - Tests across files run in parallel (but also have own module graph => will have own instance of container)
+     * - Thus, this is theoretically optimized
      */
     iocContainer
       .bind("DB_CLIENT")
