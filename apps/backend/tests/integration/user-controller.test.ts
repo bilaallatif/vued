@@ -33,8 +33,6 @@ test("POST /user creates a user and returns 201", async () => {
       expect(parsed_body).toHaveProperty("password");
       expect(parsed_body).toHaveProperty("id");
 
-      // Setup database client
-      const db_client = new PrismaClient({ datasourceUrl: config.db_url });
 
       // Check user inserted into database
       const user = await tx.user.findUnique({
@@ -64,10 +62,8 @@ test("POST /user with existing username returns 409", async () => {
         .toDynamicValue(() => tx)
         .inTransientScope();
 
-      // Setup database client
-      const db_client = new PrismaClient({ datasourceUrl: config.db_url });
       // Insert mock user
-      await db_client.user.create({
+      await tx.user.create({
         data: {
           username: "bilaal",
           password: "test",
