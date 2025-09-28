@@ -66,7 +66,7 @@ beforeEach(async () => {
     // Unbind DI DB_CLIENT
     await iocContainer.unbind("DB_CLIENT");
     // Bind DI DB_CLIENT to transaction
-    // IMPORTANT: Due to DI cannot run tests in parallel (since DB_CLIENT is rebound repeatedly)
+    // IMPORTANT: Due to DI might fail in parallel (since DB_CLIENT is rebound repeatedly)
     iocContainer
       .bind("DB_CLIENT")
       .toDynamicValue(() => tx)
@@ -92,6 +92,7 @@ afterEach(async () => {
 
   try {
     // Get return from transaction
+    // Note this will already have resolved due to `await tx_waiter;` and `tx_close()`
     await tx_runner;
   } catch (e) {
     // Catch non-rollbacks
