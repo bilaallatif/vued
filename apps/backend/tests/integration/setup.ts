@@ -4,7 +4,7 @@ import {
   StartedPostgreSqlContainer,
 } from "@testcontainers/postgresql";
 import config from "../../src/config/config";
-import { execa } from "execa";
+import { execaCommand } from "execa";
 
 let db_container: StartedPostgreSqlContainer;
 
@@ -26,14 +26,14 @@ beforeEach(async () => {
   const db_url = `postgresql://test:test@localhost:${mapped_port}/test`;
 
   // Execute schema migration
-  await execa("npx prisma migrate deploy", {
+  await execaCommand("npx prisma migrate deploy", {
     env: { DATABASE_URL: db_url },
   });
 
   // Update db_url in config
   // This should apply to app consuming module level config
   config.db_url = `postgresql://test:test@localhost:${mapped_port}/test`;
-});
+}, 100000);
 
 afterEach(async () => {
   // Drop container
