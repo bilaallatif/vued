@@ -69,7 +69,11 @@ beforeEach(async () => {
     // Unbind DI DB_CLIENT
     await iocContainer.unbind("DB_CLIENT");
     // Bind DI DB_CLIENT to transaction
-    // IMPORTANT: Due to DI might fail in parallel (since DB_CLIENT is rebound repeatedly)
+    /*
+     * IMPORTANT: Due to DI might fail in parallel (since DB_CLIENT is rebound repeatedly)
+     * This could be solved by using a different DI container for each test (would need access to test container before test starts)
+     * Would also need to bind container at runtime (which is not how TSOA resolves container)
+     */
     iocContainer
       .bind("DB_CLIENT")
       .toDynamicValue(() => tx)
