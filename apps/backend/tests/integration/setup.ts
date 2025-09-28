@@ -38,8 +38,7 @@ beforeAll(async () => {
 }, 100000);
 
 let tx_runner: Promise<void>;
-let test_waiter: Promise<void>;
-let tx_close;
+let tx_closer: () => Promise<void>;
 
 beforeEach(async () => {
   // Create lient to testcontainer
@@ -50,15 +49,19 @@ beforeEach(async () => {
   // Create promise to hold transaction until test is done
   const tx_waiter = new Promise<void>((resolve) => {
     // Globally set resolver
-    tx_close = resolve;
+    tx_closer = async () => {
+      resolve();
+    };
   });
 
   // Create reference to resolve test_waiter
-  let test_waiter_resolver;
+  let test_waiter_resolver: () => Promise<void>;
   // Create promise to hold test start until transaction is ready
-  test_waiter = new Promise<void>((resolve) => {
+  const test_waiter = new Promise<void>((resolve) => {
     // Set resolver
-    test_waiter_resolver = resolve;
+    test_waiter_resolver = async () => {
+      resolve();
+    };
   });
 
   // Start client transaction
@@ -73,7 +76,7 @@ beforeEach(async () => {
       .inTransientScope();
 
     // Resolve test_waiter (transaction ready)
-    test_waiter_resolver();
+    await test_waiter_resolver();
 
     // Wait for test to run
     await tx_waiter;
@@ -88,7 +91,7 @@ beforeEach(async () => {
 
 afterEach(async () => {
   // Close transaction
-  tx_close();
+  await tx_closer();
 
   try {
     // Get return from transaction
