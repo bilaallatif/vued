@@ -20,13 +20,16 @@ export class TmdbService {
     };
 
     const response = await fetch(url, options).then((res) => res.json());
-    const movies: Movie[] = response.results.map(
-      (movie_json: any) =>
-        ({
-          id: movie_json.id,
-          title: movie_json.title,
-        }) as Movie,
-    );
+    const movies: Movie[] = response.results
+      .map(
+        (movie_json: any) =>
+          ({
+            id: movie_json.id,
+            title: movie_json.title,
+          }) as Movie,
+      )
+      // Only return the first 5 results
+      .slice(0, 5);
 
     return movies;
   }

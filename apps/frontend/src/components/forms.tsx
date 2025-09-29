@@ -37,7 +37,7 @@ export const FormTextArea = ({ name, value, setValue }: FormInputProps) => {
       {name}
       <textarea
         className={
-          "block bg-neutral-100/5 rounded-md focus:outline-2 focus:outline-yellow-600 px-2 h-full"
+          "block bg-neutral-100/5 rounded-md focus:outline-2 focus:outline-yellow-600 px-2 h-full text-sm"
         }
         value={value}
         onChange={(e) => setValue(e.target.value)}
@@ -69,11 +69,13 @@ export const FormSearch = ({
   name,
   searchStr,
   onSearch,
+  onSelect,
   data,
 }: {
   name: string;
   searchStr: string;
   onSearch: (val: string) => void;
+  onSelect: (selected: { title: string; id: number }) => void;
   data: { title: string; id: number }[];
 }) => {
   return (
@@ -84,23 +86,27 @@ export const FormSearch = ({
           className={
             "block bg-neutral-100/5 rounded-md focus:outline-2 focus:outline-yellow-600 px-2 w-full"
           }
+          type={"search"}
           value={searchStr}
           onChange={(e) => onSearch(e.target.value)}
         />
-        <div
-          className={
-            "flex flex-col bg-neutral-700 gap-2 rounded-md top-12/10 absolute w-full"
-          }
-        >
-          {data.map((movie) => (
-            <button
-              className={"text-left hover:bg-neutral-100/5 w-full"}
-              key={movie.id}
-            >
-              <div className={"px-2"}> {movie.title}</div>
-            </button>
-          ))}
-        </div>
+        {data.length > 0 && (
+          <div
+            className={
+              "flex flex-col bg-neutral-700/90 gap-2 rounded-md top-12/10 absolute w-full border-yellow-600 border-2"
+            }
+          >
+            {data.map((movie) => (
+              <button
+                className={"text-left hover:bg-neutral-100/5 w-full"}
+                key={movie.id}
+                onClick={() => onSelect(movie)}
+              >
+                <div className={"px-2"}> {movie.title}</div>
+              </button>
+            ))}
+          </div>
+        )}
       </div>
     </label>
   );

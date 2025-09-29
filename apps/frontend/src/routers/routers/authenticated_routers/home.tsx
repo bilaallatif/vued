@@ -19,6 +19,7 @@ const NewReviewModal = ({
   onClose: () => void;
 }) => {
   const [movie, setMovie] = useState("");
+  const [_movieId, setMovieId] = useState<number | null>(null);
   const [movieData, setMovieData] = useState<{ title: string; id: number }[]>(
     [],
   );
@@ -34,6 +35,12 @@ const NewReviewModal = ({
     }
   };
 
+  const onSelect = (selected: { title: string; id: number }) => {
+    setMovie(selected.title);
+    setMovieId(selected.id);
+    setMovieData([]);
+  };
+
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
 
@@ -45,6 +52,7 @@ const NewReviewModal = ({
           name={"Movie"}
           searchStr={movie}
           onSearch={onSearch}
+          onSelect={onSelect}
           data={movieData}
         ></FormSearch>
         <FormInput name={"Title"} value={title} setValue={setTitle} />
