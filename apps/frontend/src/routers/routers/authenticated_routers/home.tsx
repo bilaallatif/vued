@@ -6,8 +6,10 @@ import { BasicButton } from "../../../components/buttons.tsx";
 import {
   FormInput,
   FormRating,
+  FormSearch,
   FormTextArea,
 } from "../../../components/forms.tsx";
+import { Default } from "@vued/sdk/api";
 
 const NewReviewModal = ({
   isOpen,
@@ -17,6 +19,21 @@ const NewReviewModal = ({
   onClose: () => void;
 }) => {
   const [movie, setMovie] = useState("");
+  const [movieData, setMovieData] = useState<{ title: string; id: number }[]>(
+    [],
+  );
+
+  const onSearch = async (movie: string) => {
+    setMovie(movie);
+    const test = await Default.getMovie({ query: { title: movie } });
+    if (!test.error) {
+      if (test.data) {
+        const apiMovieData = test.data;
+        setMovieData(apiMovieData);
+      }
+    }
+  };
+
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
 
@@ -24,12 +41,12 @@ const NewReviewModal = ({
     <Modal isOpen={isOpen} onClose={onClose}>
       <div className={"text-5xl text-yellow-600"}>New Review</div>
       <div className={"flex-1 flex flex-col items-center gap-10 py-20"}>
-        <FormInput
-          type={"search"}
+        <FormSearch
           name={"Movie"}
-          value={movie}
-          setValue={setMovie}
-        />
+          searchStr={movie}
+          onSearch={onSearch}
+          data={movieData}
+        ></FormSearch>
         <FormInput name={"Title"} value={title} setValue={setTitle} />
         <FormTextArea
           name={"Description"}
