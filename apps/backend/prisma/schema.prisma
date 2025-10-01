@@ -17,4 +17,83 @@ model User {
   id       String @id @default(uuid(4))
   username String @unique
   password String
+
+  profile Profile?
+}
+
+model Profile {
+  id  String @id @default(uuid(4))
+  bio String
+  // Profile picture url
+
+  // Cannot associate different profiles with same user
+  user_id String @unique
+  user    User   @relation(fields: [user_id], references: [id])
+
+  // Reviews made
+  reviews Review[] @relation(name: "reviews")
+
+  // Likes on reviews
+  likes Like[]
+
+  // Comments on reviews
+  comments Comment[]
+}
+
+model Movie {
+  id          String @id @default(uuid(4))
+  tmdb_id     String @unique
+  title       String
+  overview    String
+  poster_path String
+
+  // Reviews for movie
+  reviews Review[]
+}
+
+model Review {
+  id          String   @id @default(uuid(4))
+  title       String
+  description String
+  rating      Int // Need 0<=x<=5 check constraint
+  created     DateTime @default(now())
+
+  movie_id String
+  movie    Movie  @relation(fields: [movie_id], references: [id])
+
+  profile_id String
+  profile    Profile @relation(name: "reviews", fields: [profile_id], references: [id])
+
+  // Likes from profiles
+  likes Like[]
+
+  // Comments from profiles
+  comments Comment[]
+}
+
+// Explicit m-n relation between profile-review
+model Like {
+  created DateTime @default(now())
+
+  profile_id String
+  profile    Profile @relation(fields: [profile_id], references: [id])
+
+  review_id String
+  review    Review @relation(fields: [review_id], references: [id])
+
+  @@id([profile_id, review_id])
+}
+
+// Explicit m-n relation between profile-review
+model Comment {
+  // Allows for duplicate (r_id, p_id)
+  id      String   @id @default(uuid(4))
+  desc    String
+  created DateTime @default(now())
+
+  profile_id String
+  profile    Profile @relation(fields: [profile_id], references: [id])
+
+  review_id String
+  review    Review @relation(fields: [review_id], references: [id])
 }
