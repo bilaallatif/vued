@@ -4,6 +4,7 @@ import request = require("supertest");
 import { UserCreationProps } from "../../src/controllers/user-controller";
 import { User, Prisma } from "@prisma/client";
 import { iocContainer } from "../../src/ioc";
+import { run } from "node:test";
 
 test("POST /user creates a user and returns 201", async () => {
   const db_client: Prisma.TransactionClient = iocContainer.get("DB_CLIENT");
@@ -23,8 +24,10 @@ test("POST /user creates a user and returns 201", async () => {
   // Check user inserted into database
   const user = await db_client.user.findUnique({
     where: { username: "bilaal" },
+    include: { profile: true },
   });
   expect(user.username).toBe("bilaal");
+  expect(user.profile.bio).toBe("Edit your bio!");
 });
 
 test("POST /user with existing username returns 409", async () => {

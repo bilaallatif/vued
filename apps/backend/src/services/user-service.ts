@@ -31,6 +31,11 @@ export class UserService {
       data: {
         username: username,
         password: await bcrypt.hash(password, 10),
+        profile: {
+          create: {
+            bio: "Edit your bio!",
+          },
+        },
       },
     });
 
