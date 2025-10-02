@@ -44,6 +44,10 @@ const NewReviewModal = ({
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
 
+  const onSubmit = () => {
+    onClose();
+  };
+
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <div className={"text-5xl text-yellow-600"}>New Review</div>
@@ -63,7 +67,7 @@ const NewReviewModal = ({
         />
         <FormRating name={"Rating"} />
       </div>
-      <BasicButton text={"Submit"} />
+      <BasicButton text={"Submit"} onClick={onSubmit} />
     </Modal>
   );
 };
