@@ -66,6 +66,9 @@ beforeEach(async () => {
 
   // Start client transaction
   tx_runner = p_client.$transaction(async (tx) => {
+    // Snapshot container to restore after test (since resolutions are mocked)
+    iocContainer.snapshot();
+
     // Unbind DI DB_CLIENT
     await iocContainer.unbind("DB_CLIENT");
     // Bind DI DB_CLIENT to transaction
@@ -82,13 +85,21 @@ beforeEach(async () => {
     iocContainer
       .bind("DB_CLIENT")
       .toDynamicValue(() => tx)
-      .inTransientScope();
+      .inSingletonScope();
 
     // Resolve test_waiter (transaction ready)
     await test_waiter_resolver();
 
     // Wait for test to run
     await tx_waiter;
+
+    // Restore container to original state
+    /*
+     * IMPORTANT: This fixes having to use transient scope
+     * Prevents closed transaction issue from earlier
+     * I guess we no longer need to spawn a new object for each resolution since it's a clean state
+     */
+    iocContainer.restore();
 
     // Force rollback
     throw new Rollback();

@@ -19,11 +19,11 @@ const iocContainer: Container = new Container();
 // ~~Controllers~~
 // Currently all transient due to tests (need to rebind PrismClient for every new testcontainer)
 
-iocContainer.bind(TestController).toSelf().inTransientScope();
-iocContainer.bind(AuthController).toSelf().inTransientScope();
-iocContainer.bind(MovieController).toSelf().inTransientScope();
-iocContainer.bind(UserController).toSelf().inTransientScope();
-iocContainer.bind(ReviewController).toSelf().inTransientScope();
+iocContainer.bind(TestController).toSelf().inSingletonScope();
+iocContainer.bind(AuthController).toSelf().inSingletonScope();
+iocContainer.bind(MovieController).toSelf().inSingletonScope();
+iocContainer.bind(UserController).toSelf().inSingletonScope();
+iocContainer.bind(ReviewController).toSelf().inSingletonScope();
 
 // ~~~Services~~~
 
@@ -38,18 +38,14 @@ iocContainer
         },
       }),
   )
-  .inTransientScope();
+  .inSingletonScope();
 
 // Inject UserService
-export const ServiceIdentifiers = {
-  IUserService: Symbol.for("IUserService"),
-};
-
-iocContainer.bind(AuthService).toSelf().inTransientScope();
-iocContainer.bind(TmdbService).toSelf().inTransientScope();
-iocContainer.bind(UserService).toSelf().inTransientScope();
-iocContainer.bind(ReviewService).toSelf().inTransientScope();
-iocContainer.bind(ProfileService).toSelf().inTransientScope();
-iocContainer.bind(MovieService).toSelf().inTransientScope();
+iocContainer.bind(AuthService).toSelf().inSingletonScope();
+iocContainer.bind(TmdbService).toSelf().inSingletonScope();
+iocContainer.bind(UserService).toSelf().inSingletonScope();
+iocContainer.bind(ReviewService).toSelf().inSingletonScope();
+iocContainer.bind(ProfileService).toSelf().inSingletonScope();
+iocContainer.bind(MovieService).toSelf().inSingletonScope();
 
 export { iocContainer };
