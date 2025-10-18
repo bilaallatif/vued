@@ -1,4 +1,4 @@
-import { inject, injectable } from "inversify/lib/esm";
+import { inject, injectable } from "inversify";
 import { Prisma, PrismaClient, Profile } from "@prisma/client";
 
 @injectable()
