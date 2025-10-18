@@ -1,5 +1,5 @@
 import { Controller, Get, Query, Route } from "tsoa";
-import { Movie, TmdbService } from "../services/tmdb-service";
+import { MovieSearchDetails, TmdbService } from "../services/tmdb-service";
 import { inject, injectable } from "inversify";
 
 @injectable()
@@ -9,8 +9,9 @@ export class MovieController extends Controller {
     super();
   }
 
+  // todo: rename to getMovies
   @Get()
-  public async getMovie(@Query() title: string): Promise<Movie[]> {
-    return await this.tmdbService.getMovie(title);
+  public async getMovie(@Query() title: string): Promise<MovieSearchDetails[]> {
+    return await this.tmdbService.getMovies(title);
   }
 }

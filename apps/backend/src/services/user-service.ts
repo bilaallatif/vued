@@ -12,7 +12,9 @@ export class UserService {
   ) {}
 
   public async get(id: string): Promise<Result<User, DatabaseError>> {
-    const user = await this.db_client.user.findUnique({ where: { id: id } });
+    const user = await this.db_client.user.findUnique({
+      where: { id: id },
+    });
     return user ? OK(user) : ERR(DatabaseError.NOT_FOUND);
   }
 

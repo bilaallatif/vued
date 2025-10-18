@@ -9,6 +9,10 @@ import { MovieController } from "./controllers/movie-controller";
 import { AuthService } from "./services/auth-service";
 import { TmdbService } from "./services/tmdb-service";
 import { TestController } from "./controllers/test-controller";
+import { ReviewService } from "./services/review-service";
+import { ProfileService } from "./services/profile-service";
+import { ReviewController } from "./controllers/review-controller";
+import { MovieService } from "./services/movie-service";
 
 const iocContainer: Container = new Container();
 
@@ -19,6 +23,7 @@ iocContainer.bind(TestController).toSelf().inTransientScope();
 iocContainer.bind(AuthController).toSelf().inTransientScope();
 iocContainer.bind(MovieController).toSelf().inTransientScope();
 iocContainer.bind(UserController).toSelf().inTransientScope();
+iocContainer.bind(ReviewController).toSelf().inTransientScope();
 
 // ~~~Services~~~
 
@@ -43,5 +48,8 @@ export const ServiceIdentifiers = {
 iocContainer.bind(AuthService).toSelf().inTransientScope();
 iocContainer.bind(TmdbService).toSelf().inTransientScope();
 iocContainer.bind(UserService).toSelf().inTransientScope();
+iocContainer.bind(ReviewService).toSelf().inTransientScope();
+iocContainer.bind(ProfileService).toSelf().inTransientScope();
+iocContainer.bind(MovieService).toSelf().inTransientScope();
 
 export { iocContainer };
