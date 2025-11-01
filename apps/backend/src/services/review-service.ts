@@ -29,4 +29,9 @@ export class ReviewService {
 
     return review;
   }
+
+  public async getReviews(): Promise<Review[]> {
+    const reviews = await this.db_client.review.findMany();
+    return reviews;
+  }
 }

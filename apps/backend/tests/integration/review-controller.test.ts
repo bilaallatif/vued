@@ -7,7 +7,7 @@ import { Prisma } from "@prisma/client";
 import { sign } from "jsonwebtoken";
 import { ReviewDto } from "../../src/controllers/review-controller";
 
-test("POST /reviews for a non-cached movie creates a review and caches movie", async () => {
+test("POST /review for a non-cached movie creates a review and caches movie", async () => {
   const db_client: Prisma.TransactionClient = iocContainer.get("DB_CLIENT");
 
   // Mock user + profile
@@ -86,7 +86,7 @@ test("POST /reviews for a non-cached movie creates a review and caches movie", a
   });
 });
 
-test("POST /reviews for a cached movie creates a review and does not cache movie", async () => {
+test("POST /review for a cached movie creates a review and does not cache movie", async () => {
   const db_client: Prisma.TransactionClient = iocContainer.get("DB_CLIENT");
 
   // Spy on TmdbService to check if getMovieDetails is called
@@ -153,4 +153,69 @@ test("POST /reviews for a cached movie creates a review and does not cache movie
     profile_id: profile.id,
     created: expect.any(Date),
   });
+});
+
+test("GET /review returns list of reviews", async () => {
+  const db_client: Prisma.TransactionClient = iocContainer.get("DB_CLIENT");
+
+  // Mock user + profile
+  const mock_user = await db_client.user.create({
+    data: {
+      username: "bilaal",
+      password: "test",
+      profile: {
+        create: {
+          bio: "Edit your bio!",
+        },
+      },
+    },
+  });
+  const mock_profile = await db_client.profile.findUnique({
+    where: { user_id: mock_user.id },
+  });
+
+  // Mock movie
+  const mock_movie = await db_client.movie.create({
+    data: {
+      tmdb_id: 1,
+      title: "Test Movie",
+      overview: "Test Overview",
+      poster_path: "test.jpg",
+    },
+  });
+
+  const review = await db_client.review.create({
+    data: {
+      title: "Test Title",
+      description: "Test Description",
+      rating: 5,
+      movie_id: mock_movie.id,
+      profile_id: mock_profile.id,
+    },
+  });
+
+  // Generate access token for user
+  const access_token = sign({ userId: mock_user.id }, "test", {
+    expiresIn: "60s",
+  });
+
+  const res = await request(app)
+    .get("/review")
+    .set("Authorization", `Bearer ${access_token}`);
+
+  expect(res.statusCode).toBe(200);
+
+  const parsed_body = res.body as ReviewDto[];
+
+  expect(parsed_body).toEqual([
+    {
+      id: expect.any(String),
+      title: review.title,
+      description: review.description,
+      rating: review.rating,
+      movie_id: mock_movie.id,
+      profile_id: mock_profile.id,
+      created: expect.any(String),
+    },
+  ]);
 });

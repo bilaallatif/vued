@@ -7,6 +7,7 @@ import {
   Request,
   Body,
   Middlewares,
+  Get,
 } from "tsoa";
 import { Request as ExRequest } from "express";
 import { HttpError } from "../types/exceptions";
@@ -68,5 +69,11 @@ export class ReviewController extends Controller {
     );
 
     return review as ReviewDto;
+  }
+
+  @Get()
+  public async getReviews(): Promise<ReviewDto[]> {
+    const reviews = await this.reviewService.getReviews();
+    return reviews as ReviewDto[];
   }
 }
