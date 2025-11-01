@@ -1,10 +1,19 @@
 import { inject, injectable } from "inversify";
-import { Controller, Post, Route, SuccessResponse, Request, Body } from "tsoa";
+import {
+  Controller,
+  Post,
+  Route,
+  SuccessResponse,
+  Request,
+  Body,
+  Middlewares,
+} from "tsoa";
 import { Request as ExRequest } from "express";
 import { HttpError } from "../types/exceptions";
 import { ReviewService } from "../services/review-service";
 import { ProfileService } from "../services/profile-service";
 import { MovieService } from "../services/movie-service";
+import { authHandler } from "../middleware/authentication";
 
 type ReviewCreateDto = {
   title: string;
@@ -13,7 +22,7 @@ type ReviewCreateDto = {
   movie_id: number;
 };
 
-type ReviewDto = {
+export type ReviewDto = {
   id: string;
   title: string;
   description: string;
@@ -23,6 +32,7 @@ type ReviewDto = {
   profile_id: string;
 };
 
+@Middlewares(authHandler)
 @injectable()
 @Route("/review")
 export class ReviewController extends Controller {
