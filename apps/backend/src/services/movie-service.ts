@@ -34,4 +34,11 @@ export class MovieService {
     // If found, return from cache
     return cached_movie;
   }
+
+  public async getMovie(id: string): Promise<Movie | null> {
+    const movie = await this.db_client.movie.findUnique({
+      where: { id: id },
+    });
+    return movie;
+  }
 }

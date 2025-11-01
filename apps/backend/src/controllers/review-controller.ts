@@ -33,9 +33,9 @@ export type ReviewDto = {
   profile_id: string;
 };
 
-@Middlewares(authHandler)
 @injectable()
 @Route("/review")
+@Middlewares(authHandler)
 export class ReviewController extends Controller {
   constructor(
     @inject(MovieService) private readonly movieService: MovieService,
