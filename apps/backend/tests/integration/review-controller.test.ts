@@ -45,10 +45,10 @@ test("POST /review for a non-cached movie creates a review and caches movie", as
   const res = await request(app)
     .post("/review")
     .send({
+      tmdb_id: 1,
       title: "Test Title",
       description: "Test Description",
       rating: 5,
-      tmdb_id: 1,
     })
     .set("Authorization", `Bearer ${access_token}`);
 

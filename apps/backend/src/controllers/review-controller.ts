@@ -17,10 +17,10 @@ import { MovieService } from "../services/movie-service";
 import { authHandler } from "../middleware/authentication";
 
 type ReviewCreateDto = {
+  tmdb_id: number;
   title: string;
   description: string;
   rating: number;
-  tmdb_id: number;
 };
 
 export type ReviewDto = {

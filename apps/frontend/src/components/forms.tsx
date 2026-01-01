@@ -29,7 +29,11 @@ export const FormInput = ({
   );
 };
 
-export const FormTextArea = ({ name, value, setValue }: FormInputProps) => {
+export const FormTextArea = ({
+  name,
+  value,
+  setValue,
+}: Omit<FormInputProps, "type">) => {
   return (
     <label
       className={"text-2xl h-full text-neutral-400 flex flex-col gap-2 w-full"}
@@ -46,7 +50,13 @@ export const FormTextArea = ({ name, value, setValue }: FormInputProps) => {
   );
 };
 
-export const FormRating = ({ name }: { name: string }) => {
+export interface FormRatingProps {
+  name: string;
+  value: number;
+  setValue: (value: number) => void;
+}
+
+export const FormRating = ({ name, value, setValue }: FormRatingProps) => {
   return (
     <label
       className={
@@ -59,11 +69,29 @@ export const FormRating = ({ name }: { name: string }) => {
           "flex items-center justify-center bg-neutral-100/5 rounded-md p-2"
         }
       >
-        <Rating name={"rating"} defaultValue={0} precision={0.5} size="large" />
+        <Rating
+          name={"rating"}
+          value={value}
+          precision={1}
+          onChange={(_, value) => {
+            if (value) {
+              setValue(value);
+            }
+          }}
+          size="large"
+        />
       </div>
     </label>
   );
 };
+
+export interface FormSelectProps {
+  name: string;
+  searchStr: string;
+  onSearch: (val: string) => void;
+  onSelect: (selected: { title: string; tmdb_id: number }) => void;
+  data: { title: string; tmdb_id: number }[];
+}
 
 // todo: refactor this to be general purpose
 export const FormSearch = ({
@@ -72,13 +100,7 @@ export const FormSearch = ({
   onSearch,
   onSelect,
   data,
-}: {
-  name: string;
-  searchStr: string;
-  onSearch: (val: string) => void;
-  onSelect: (selected: { title: string; tmdb_id: number }) => void;
-  data: { title: string; tmdb_id: number }[];
-}) => {
+}: FormSelectProps) => {
   return (
     <label className={"text-2xl text-neutral-400 flex flex-col gap-2 w-full"}>
       {name}

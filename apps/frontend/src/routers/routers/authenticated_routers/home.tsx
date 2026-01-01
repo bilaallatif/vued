@@ -19,10 +19,13 @@ const NewReviewModal = ({
   onClose: () => void;
 }) => {
   const [movie, setMovie] = useState("");
-  const [_movieId, setMovieId] = useState<number | null>(null);
+  const [tmdbId, setTmdbId] = useState<number | null>(null);
   const [movieData, setMovieData] = useState<
     { title: string; tmdb_id: number }[]
   >([]);
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [rating, setRating] = useState(0);
 
   const onSearch = async (movie: string) => {
     setMovie(movie);
@@ -39,14 +42,25 @@ const NewReviewModal = ({
 
   const onSelect = (selected: { title: string; tmdb_id: number }) => {
     setMovie(selected.title);
-    setMovieId(selected.tmdb_id);
+    setTmdbId(selected.tmdb_id);
     setMovieData([]);
   };
 
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
+  const onSubmit = async () => {
+    if (tmdbId === null) {
+      console.error("No movie selected!");
+      return;
+    }
 
-  const onSubmit = () => {
+    await Default.createReview({
+      body: {
+        tmdb_id: tmdbId,
+        title: title,
+        description: description,
+        rating: rating,
+      },
+    });
+
     onClose();
   };
 
@@ -67,7 +81,7 @@ const NewReviewModal = ({
           value={description}
           setValue={setDescription}
         />
-        <FormRating name={"Rating"} />
+        <FormRating name={"Rating"} value={rating} setValue={setRating} />
       </div>
       <BasicButton text={"Submit"} onClick={onSubmit} />
     </Modal>
