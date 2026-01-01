@@ -55,7 +55,7 @@ export class AuthController extends Controller {
 
     // Generate new access token
     return jwt.sign({ userId: payload.userId }, "test", {
-      expiresIn: "15s",
+      expiresIn: "60s",
     });
   }
 
