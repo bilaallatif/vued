@@ -31,7 +31,7 @@ test("getOrCacheMovie inserts new movie if not cached", async () => {
 
   // Mock TMDB API response
   const mock_movie_details = {
-    id: 1,
+    tmdb_id: 1,
     title: "Test Movie",
     overview: "Test Overview",
     poster_path: "test.jpg",
@@ -48,13 +48,13 @@ test("getOrCacheMovie inserts new movie if not cached", async () => {
 
   // Get non-cached movie
   const cached_movie = await movieService.getOrCacheMovie(
-    mock_movie_details.id,
+    mock_movie_details.tmdb_id,
   );
 
   // Expect mock movie details to be returned
   expect(cached_movie).toEqual(
     expect.objectContaining({
-      tmdb_id: mock_movie_details.id,
+      tmdb_id: mock_movie_details.tmdb_id,
       title: mock_movie_details.title,
       overview: mock_movie_details.overview,
       poster_path: mock_movie_details.poster_path,
@@ -63,12 +63,12 @@ test("getOrCacheMovie inserts new movie if not cached", async () => {
 
   // Get movie from database
   const cached_movie_orm = await db_client.movie.findUnique({
-    where: { tmdb_id: mock_movie_details.id },
+    where: { tmdb_id: mock_movie_details.tmdb_id },
   });
   // Expect movie to be inserted into database
   expect(cached_movie_orm).toEqual(
     expect.objectContaining({
-      tmdb_id: mock_movie_details.id,
+      tmdb_id: mock_movie_details.tmdb_id,
       title: mock_movie_details.title,
       overview: mock_movie_details.overview,
       poster_path: mock_movie_details.poster_path,

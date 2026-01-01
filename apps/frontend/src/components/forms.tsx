@@ -65,6 +65,7 @@ export const FormRating = ({ name }: { name: string }) => {
   );
 };
 
+// todo: refactor this to be general purpose
 export const FormSearch = ({
   name,
   searchStr,
@@ -75,8 +76,8 @@ export const FormSearch = ({
   name: string;
   searchStr: string;
   onSearch: (val: string) => void;
-  onSelect: (selected: { title: string; id: number }) => void;
-  data: { title: string; id: number }[];
+  onSelect: (selected: { title: string; tmdb_id: number }) => void;
+  data: { title: string; tmdb_id: number }[];
 }) => {
   return (
     <label className={"text-2xl text-neutral-400 flex flex-col gap-2 w-full"}>
@@ -99,7 +100,7 @@ export const FormSearch = ({
             {data.map((movie) => (
               <button
                 className={"text-left hover:bg-neutral-100/5 w-full"}
-                key={movie.id}
+                key={movie.tmdb_id}
                 onClick={() => onSelect(movie)}
               >
                 <div className={"px-2"}> {movie.title}</div>

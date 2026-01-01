@@ -20,7 +20,7 @@ type ReviewCreateDto = {
   title: string;
   description: string;
   rating: number;
-  movie_id: number;
+  tmdb_id: number;
 };
 
 export type ReviewDto = {
@@ -57,7 +57,7 @@ export class ReviewController extends Controller {
     if (profile == null) throw new HttpError(404, "Profile not found");
 
     const cached_movie = await this.movieService.getOrCacheMovie(
-      requestBody.movie_id,
+      requestBody.tmdb_id,
     );
 
     const review = await this.reviewService.createReview(

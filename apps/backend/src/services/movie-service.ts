@@ -21,7 +21,7 @@ export class MovieService {
       const movie_details = await this.tmdbService.getMovieDetails(tmdb_id);
       const new_cached_movie = await this.db_client.movie.create({
         data: {
-          tmdb_id: movie_details.id,
+          tmdb_id: movie_details.tmdb_id,
           title: movie_details.title,
           overview: movie_details.overview,
           poster_path: movie_details.poster_path,

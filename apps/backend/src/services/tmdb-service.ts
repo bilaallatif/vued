@@ -2,13 +2,13 @@ import config from "../config/config";
 import { injectable } from "inversify";
 
 export type MovieDetails = {
-  id: number;
+  tmdb_id: number;
   title: string;
   overview: string;
   poster_path: string;
 };
 
-export type MovieSearchDetails = Pick<MovieDetails, "id" | "title">;
+export type MovieSearchDetails = Pick<MovieDetails, "tmdb_id" | "title">;
 
 @injectable()
 export class TmdbService {
@@ -26,7 +26,7 @@ export class TmdbService {
     if (response.status == 200) {
       const details = await response.json();
       const movie: MovieDetails = {
-        id: details.id,
+        tmdb_id: details.id,
         title: details.title,
         overview: details.overview,
         poster_path: details.poster_path,
@@ -52,7 +52,7 @@ export class TmdbService {
       .map(
         (movie_json: any) =>
           ({
-            id: movie_json.id,
+            tmdb_id: movie_json.id,
             title: movie_json.title,
           }) as MovieSearchDetails,
       )

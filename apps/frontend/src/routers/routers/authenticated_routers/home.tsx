@@ -20,24 +20,26 @@ const NewReviewModal = ({
 }) => {
   const [movie, setMovie] = useState("");
   const [_movieId, setMovieId] = useState<number | null>(null);
-  const [movieData, setMovieData] = useState<{ title: string; id: number }[]>(
-    [],
-  );
+  const [movieData, setMovieData] = useState<
+    { title: string; tmdb_id: number }[]
+  >([]);
 
   const onSearch = async (movie: string) => {
     setMovie(movie);
-    const test = await Default.getTmdbMoviesByName({ query: { title: movie } });
-    if (!test.error) {
-      if (test.data) {
-        const apiMovieData = test.data;
+    const tmdb_movie_details = await Default.getTmdbMoviesByName({
+      query: { title: movie },
+    });
+    if (!tmdb_movie_details.error) {
+      if (tmdb_movie_details.data) {
+        const apiMovieData = tmdb_movie_details.data;
         setMovieData(apiMovieData);
       }
     }
   };
 
-  const onSelect = (selected: { title: string; id: number }) => {
+  const onSelect = (selected: { title: string; tmdb_id: number }) => {
     setMovie(selected.title);
-    setMovieId(selected.id);
+    setMovieId(selected.tmdb_id);
     setMovieData([]);
   };
 

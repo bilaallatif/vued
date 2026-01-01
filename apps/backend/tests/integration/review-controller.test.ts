@@ -25,7 +25,7 @@ test("POST /review for a non-cached movie creates a review and caches movie", as
 
   // Mock TMDB API response
   const mock_movie_details = {
-    id: 1,
+    tmdb_id: 1,
     title: "Test Movie",
     overview: "Test Overview",
     poster_path: "test.jpg",
@@ -48,7 +48,7 @@ test("POST /review for a non-cached movie creates a review and caches movie", as
       title: "Test Title",
       description: "Test Description",
       rating: 5,
-      movie_id: 1,
+      tmdb_id: 1,
     })
     .set("Authorization", `Bearer ${access_token}`);
 
@@ -62,7 +62,7 @@ test("POST /review for a non-cached movie creates a review and caches movie", as
   });
   expect(movie_details).toEqual({
     id: parsed_body.movie_id,
-    tmdb_id: mock_movie_details.id,
+    tmdb_id: mock_movie_details.tmdb_id,
     title: mock_movie_details.title,
     overview: mock_movie_details.overview,
     poster_path: mock_movie_details.poster_path,
@@ -127,7 +127,7 @@ test("POST /review for a cached movie creates a review and does not cache movie"
       title: "Test Title",
       description: "Test Description",
       rating: 5,
-      movie_id: mock_movie.tmdb_id,
+      tmdb_id: mock_movie.tmdb_id,
     })
     .set("Authorization", `Bearer ${access_token}`);
 
