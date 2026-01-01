@@ -26,7 +26,7 @@ const NewReviewModal = ({
 
   const onSearch = async (movie: string) => {
     setMovie(movie);
-    const test = await Default.getMovie({ query: { title: movie } });
+    const test = await Default.getTmdbMoviesByName({ query: { title: movie } });
     if (!test.error) {
       if (test.data) {
         const apiMovieData = test.data;
