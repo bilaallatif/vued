@@ -1,6 +1,6 @@
 import { createRoute } from "@tanstack/react-router";
 import { AuthenticatedLayoutRoute } from "../authenticated_base.tsx";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Modal } from "../../../components/modal.tsx";
 import { BasicButton } from "../../../components/buttons.tsx";
 import {
@@ -9,7 +9,7 @@ import {
   FormSearch,
   FormTextArea,
 } from "../../../components/forms.tsx";
-import { Default } from "@vued/sdk/api";
+import { Default, type ReviewDto } from "@vued/sdk/api";
 
 const NewReviewModal = ({
   isOpen,
@@ -88,19 +88,79 @@ const NewReviewModal = ({
   );
 };
 
+const ReviewCard = ({
+  title,
+  rating,
+  movie_name,
+  description,
+}: {
+  title: string;
+  rating: number;
+  movie_name: string;
+  description: string;
+}) => {
+  return (
+    <div
+      className={
+        "bg-yellow-600/50 rounded-md w-full h-50 hover:scale-110 transition-transform duration-200 flex flex-col gap-2 p-2"
+      }
+    >
+      <div className={"flex flex-col"}>
+        <div className={"flex flex-row justify-between"}>
+          <div className={"text-2xl"}>{title}</div>
+          <div className={"text-2xl"}>{rating}</div>
+        </div>
+        <div className={"text-xl"}>{movie_name}</div>
+      </div>
+      <div className={"flex-1"}>{description}</div>
+    </div>
+  );
+};
+
+const ReviewsList = () => {
+  const [reviews, setReviews] = useState<ReviewDto[]>([]);
+
+  const populateReviews = async () => {
+    const review_data = await Default.getReviews();
+    if (!review_data.error && review_data.data) {
+      setReviews(review_data.data);
+    }
+  };
+
+  useEffect(() => {
+    populateReviews();
+  }, []);
+
+  return (
+    <div className={"p-10 w-full grid grid-cols-8 gap-10"}>
+      {reviews.map((review) => (
+        <ReviewCard
+          title={review.title}
+          rating={review.rating}
+          movie_name={"Movie Name"}
+          description={review.description}
+        />
+      ))}
+    </div>
+  );
+};
+
 const Home = () => {
   const [isNewReviewOpen, setIsNewReviewOpen] = useState(false);
 
   return (
-    <div className={"w-full h-full flex flex-col items-center justify-center"}>
-      <BasicButton
-        onClick={() => setIsNewReviewOpen(true)}
-        text={"New Review"}
-      />
+    <div className={"w-full h-full flex flex-col items-center"}>
       <NewReviewModal
         isOpen={isNewReviewOpen}
         onClose={() => setIsNewReviewOpen(false)}
       />
+      <div className={"p-4"}>
+        <BasicButton
+          onClick={() => setIsNewReviewOpen(true)}
+          text={"New Review"}
+        />
+      </div>
+      <ReviewsList />
     </div>
   );
 };
