@@ -9,7 +9,7 @@ import {
   FormSearch,
   FormTextArea,
 } from "../../../components/forms.tsx";
-import { Default, type ReviewDto } from "@vued/sdk/api";
+import { Default, type ReviewDetailsDto } from "@vued/sdk/api";
 
 const NewReviewModal = ({
   isOpen,
@@ -118,7 +118,7 @@ const ReviewCard = ({
 };
 
 const ReviewsList = () => {
-  const [reviews, setReviews] = useState<ReviewDto[]>([]);
+  const [reviews, setReviews] = useState<ReviewDetailsDto[]>([]);
 
   const populateReviews = async () => {
     const review_data = await Default.getReviews();
@@ -137,7 +137,7 @@ const ReviewsList = () => {
         <ReviewCard
           title={review.title}
           rating={review.rating}
-          movie_name={"Movie Name"}
+          movie_name={review.movie.title}
           description={review.description}
         />
       ))}

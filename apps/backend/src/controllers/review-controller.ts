@@ -33,6 +33,24 @@ export type ReviewDto = {
   profile_id: string;
 };
 
+export type ReviewDetailsDto = {
+  title: string;
+  description: string;
+  rating: number;
+  created: Date;
+  movie: {
+    title: string;
+    overview: string;
+    poster_path: string;
+  };
+  profile: {
+    user: {
+      username: string;
+    };
+    bio: string;
+  };
+};
+
 @injectable()
 @Route("/review")
 @Middlewares(authHandler)
@@ -72,8 +90,27 @@ export class ReviewController extends Controller {
   }
 
   @Get()
-  public async getReviews(): Promise<ReviewDto[]> {
-    const reviews = await this.reviewService.getReviews();
-    return reviews as ReviewDto[];
+  public async getReviews(): Promise<ReviewDetailsDto[]> {
+    const orm_reviews = await this.reviewService.getReviews();
+    return orm_reviews.map(
+      (orm_review) =>
+        ({
+          title: orm_review.title,
+          description: orm_review.description,
+          rating: orm_review.rating,
+          created: orm_review.created,
+          movie: {
+            title: orm_review.movie.title,
+            overview: orm_review.movie.overview,
+            poster_path: orm_review.movie.poster_path,
+          },
+          profile: {
+            user: {
+              username: orm_review.profile.user.username,
+            },
+            bio: orm_review.profile.bio,
+          },
+        }) as ReviewDetailsDto,
+    );
   }
 }

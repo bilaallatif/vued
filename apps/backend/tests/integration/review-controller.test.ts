@@ -209,13 +209,21 @@ test("GET /review returns list of reviews", async () => {
 
   expect(parsed_body).toEqual([
     {
-      id: expect.any(String),
       title: review.title,
       description: review.description,
       rating: review.rating,
-      movie_id: mock_movie.id,
-      profile_id: mock_profile.id,
       created: expect.any(String),
+      movie: {
+        title: mock_movie.title,
+        overview: mock_movie.overview,
+        poster_path: mock_movie.poster_path,
+      },
+      profile: {
+        bio: mock_profile.bio,
+        user: {
+          username: mock_user.username,
+        },
+      },
     },
   ]);
 });
