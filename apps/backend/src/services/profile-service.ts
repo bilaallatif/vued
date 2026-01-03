@@ -1,5 +1,5 @@
 import { inject, injectable } from "inversify";
-import { Prisma, PrismaClient, Profile } from "@prisma/client";
+import { Prisma, PrismaClient } from "@prisma/client";
 
 @injectable()
 export class ProfileService {
@@ -8,9 +8,10 @@ export class ProfileService {
     private db_client: PrismaClient | Prisma.TransactionClient,
   ) {}
 
-  public async getByUserId(id: string): Promise<Profile | null> {
+  public async getByUserId(id: string) {
     const profile = await this.db_client.profile.findUnique({
       where: { user_id: id },
+      include: { user: true },
     });
     return profile;
   }
