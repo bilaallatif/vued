@@ -22,4 +22,13 @@ export class ProfileService {
     });
     return profiles;
   }
+
+  public async updateProfileByUserId(id: string, bio: string) {
+    const profile = await this.db_client.profile.update({
+      where: { user_id: id },
+      data: { bio: bio },
+      include: { user: true },
+    });
+    return profile;
+  }
 }
