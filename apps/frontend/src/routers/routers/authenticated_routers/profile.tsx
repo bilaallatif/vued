@@ -15,6 +15,12 @@ const Profile = () => {
     }
   };
 
+  const updateProfileDetails = async () => {
+    await Default.updateMyProfile({
+      body: { bio },
+    });
+  };
+
   useEffect(() => {
     populateProfileDetails();
   }, []);
@@ -27,7 +33,7 @@ const Profile = () => {
         </div>
 
         <div className={"flex flex-row justify-start w-full gap-5"}>
-          <BasicButton text={"Update"} />
+          <BasicButton onClick={updateProfileDetails} text={"Update"} />
         </div>
       </div>
     </div>
