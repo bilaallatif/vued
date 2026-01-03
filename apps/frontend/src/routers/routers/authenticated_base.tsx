@@ -47,7 +47,6 @@ const BaseAuthenticated = () => {
           <NavbarLink to={"/home"} text={"Home"} />
           <NavbarLink to={"/users"} text={"Users"} />
           <NavbarLink to={"/profile"} text={"Profile"} />
-          <NavbarLink to={"/test"} text={"Test"} />
         </div>
         <div
           className={
