@@ -90,28 +90,52 @@ const NewReviewModal = ({
   );
 };
 
-const ReviewCard = ({
-  title,
-  rating,
-  movie_name,
-  description,
+const ReviewInspectionModal = ({
+  isOpen,
+  onClose,
+  details,
 }: {
-  title: string;
-  rating: number;
-  movie_name: string;
-  description: string;
+  isOpen: boolean;
+  onClose: () => void;
+  details: ReviewDetailsDto;
 }) => {
   return (
-    <Card>
-      <div className={"flex flex-col"}>
-        <div className={"flex flex-row justify-between"}>
-          <div className={"text-2xl"}>{title}</div>
-          <div className={"text-2xl"}>{rating}</div>
-        </div>
-        <div className={"text-xl"}>{movie_name}</div>
+    <Modal isOpen={isOpen} onClose={onClose}>
+      <div className={"text-5xl text-yellow-600"}>
+        {details.title} ({details.rating})
       </div>
-      <div className={"flex-1"}>{description}</div>
-    </Card>
+      <div className={"w-full flex-1 flex flex-col items-start gap-10 py-20"}>
+        <div className={"text-2xl text-neutral-400"}>{details.movie.title}</div>
+        <div className={"text-xl text-neutral-400"}>{details.description}</div>
+        <div className={"text-xl text-neutral-400"}>
+          - {details.profile.user.username}
+        </div>
+      </div>
+    </Modal>
+  );
+};
+
+const ReviewCard = ({ details }: { details: ReviewDetailsDto }) => {
+  const [isReviewInspectionOpen, setIsReviewInspectionOpen] = useState(false);
+  return (
+    <div>
+      <ReviewInspectionModal
+        isOpen={isReviewInspectionOpen}
+        onClose={() => setIsReviewInspectionOpen(false)}
+        details={details}
+      />
+      <Card onClick={() => setIsReviewInspectionOpen(true)}>
+        <div className={"w-full flex flex-col items-start"}>
+          <div className={"w-full flex flex-row justify-between"}>
+            <div className={"text-2xl"}>
+              {details.title} - {details.profile.user.username}
+            </div>
+            <div className={"text-2xl"}>{details.rating}</div>
+          </div>
+          <div className={"text-xl"}>{details.movie.title}</div>
+        </div>
+      </Card>
+    </div>
   );
 };
 
@@ -132,12 +156,7 @@ const ReviewsList = () => {
   return (
     <List>
       {reviews.map((review) => (
-        <ReviewCard
-          title={review.title}
-          rating={review.rating}
-          movie_name={review.movie.title}
-          description={review.description}
-        />
+        <ReviewCard details={review} />
       ))}
     </List>
   );
@@ -147,18 +166,18 @@ const Home = () => {
   const [isNewReviewOpen, setIsNewReviewOpen] = useState(false);
 
   return (
-    <div className={"w-full h-full flex flex-col items-center"}>
+    <div className={"w-full h-full flex flex-col items-center justify-between"}>
       <NewReviewModal
         isOpen={isNewReviewOpen}
         onClose={() => setIsNewReviewOpen(false)}
       />
-      <div className={"p-4"}>
+      <ReviewsList />
+      <div className={"p-10"}>
         <BasicButton
           onClick={() => setIsNewReviewOpen(true)}
           text={"New Review"}
         />
       </div>
-      <ReviewsList />
     </div>
   );
 };

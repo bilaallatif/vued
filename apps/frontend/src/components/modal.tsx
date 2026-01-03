@@ -19,7 +19,7 @@ export const Modal = ({
     >
       <div
         className={
-          "fixed h-4/5 flex flex-col items-center justify-start py-10 p-20 bg-neutral-800 rounded-md animate-fade-quick"
+          "fixed h-4/5 min-w-1/4 max-w-1/2 flex flex-col items-center justify-start py-10 p-20 bg-neutral-800 rounded-md animate-fade-quick"
         }
       >
         <button

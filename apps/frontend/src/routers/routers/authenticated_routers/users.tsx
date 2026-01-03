@@ -8,7 +8,7 @@ import { Default, type ProfileDetailsDto } from "@vued/sdk/api";
 const UserCard = ({ username, bio }: { username: string; bio: string }) => {
   return (
     <Card>
-      <div className={"flex flex-col"}>
+      <div className={"w-full flex flex-col items-start"}>
         <div className={"text-3xl"}>{username}</div>
         <div className={"text-xl"}>{bio}</div>
       </div>
