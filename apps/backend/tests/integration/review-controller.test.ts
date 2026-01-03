@@ -5,7 +5,10 @@ import request = require("supertest");
 import app from "../../src/app";
 import { Prisma } from "@prisma/client";
 import { sign } from "jsonwebtoken";
-import { ReviewDto } from "../../src/controllers/review-controller";
+import {
+  ReviewDetailsDto,
+  ReviewDto,
+} from "../../src/controllers/review-controller";
 
 test("POST /review for a non-cached movie creates a review and caches movie", async () => {
   const db_client: Prisma.TransactionClient = iocContainer.get("DB_CLIENT");
@@ -205,7 +208,7 @@ test("GET /review returns list of reviews", async () => {
 
   expect(res.statusCode).toBe(200);
 
-  const parsed_body = res.body as ReviewDto[];
+  const parsed_body = res.body as ReviewDetailsDto[];
 
   expect(parsed_body).toEqual([
     {
