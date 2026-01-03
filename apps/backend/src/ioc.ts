@@ -14,6 +14,7 @@ import { ProfileService } from "./services/profile-service";
 import { ReviewController } from "./controllers/review-controller";
 import { MovieService } from "./services/movie-service";
 import { TmdbController } from "./controllers/tmdb-controller";
+import { ProfileController } from "./controllers/profile-controller";
 
 const iocContainer: Container = new Container();
 
@@ -26,6 +27,7 @@ iocContainer.bind(MovieController).toSelf().inSingletonScope();
 iocContainer.bind(TmdbController).toSelf().inSingletonScope();
 iocContainer.bind(UserController).toSelf().inSingletonScope();
 iocContainer.bind(ReviewController).toSelf().inSingletonScope();
+iocContainer.bind(ProfileController).toSelf().inSingletonScope();
 
 // ~~~Services~~~
 

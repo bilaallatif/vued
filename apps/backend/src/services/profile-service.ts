@@ -14,4 +14,11 @@ export class ProfileService {
     });
     return profile;
   }
+
+  public async getProfiles() {
+    const profiles = await this.db_client.profile.findMany({
+      include: { user: true },
+    });
+    return profiles;
+  }
 }
