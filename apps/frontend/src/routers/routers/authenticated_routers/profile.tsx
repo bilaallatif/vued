@@ -29,7 +29,7 @@ const Profile = () => {
     <div className={"w-full h-full flex flex-col items-center justify-center"}>
       <div className={"flex flex-col px-10 w-full lg:px-0 lg:w-1/4 gap-10"}>
         <div className={"flex flex-col w-full gap-2"}>
-          <FormInput name={"Username"} value={bio} setValue={setBio} />
+          <FormInput name={"Bio"} value={bio} setValue={setBio} />
         </div>
 
         <div className={"flex flex-row justify-start w-full gap-5"}>
