@@ -10,6 +10,8 @@ import {
   FormTextArea,
 } from "../../../components/forms.tsx";
 import { Default, type ReviewDetailsDto } from "@vued/sdk/api";
+import { List } from "../../../components/list.tsx";
+import { Card } from "../../../components/card.tsx";
 
 const NewReviewModal = ({
   isOpen,
@@ -100,11 +102,7 @@ const ReviewCard = ({
   description: string;
 }) => {
   return (
-    <div
-      className={
-        "bg-yellow-600/50 rounded-md w-full h-50 hover:scale-110 transition-transform duration-200 flex flex-col gap-2 p-2"
-      }
-    >
+    <Card>
       <div className={"flex flex-col"}>
         <div className={"flex flex-row justify-between"}>
           <div className={"text-2xl"}>{title}</div>
@@ -113,7 +111,7 @@ const ReviewCard = ({
         <div className={"text-xl"}>{movie_name}</div>
       </div>
       <div className={"flex-1"}>{description}</div>
-    </div>
+    </Card>
   );
 };
 
@@ -121,9 +119,9 @@ const ReviewsList = () => {
   const [reviews, setReviews] = useState<ReviewDetailsDto[]>([]);
 
   const populateReviews = async () => {
-    const review_data = await Default.getReviews();
-    if (!review_data.error && review_data.data) {
-      setReviews(review_data.data);
+    const reviews_data = await Default.getReviews();
+    if (!reviews_data.error && reviews_data.data) {
+      setReviews(reviews_data.data);
     }
   };
 
@@ -132,7 +130,7 @@ const ReviewsList = () => {
   }, []);
 
   return (
-    <div className={"p-10 w-full grid grid-cols-8 gap-10"}>
+    <List>
       {reviews.map((review) => (
         <ReviewCard
           title={review.title}
@@ -141,7 +139,7 @@ const ReviewsList = () => {
           description={review.description}
         />
       ))}
-    </div>
+    </List>
   );
 };
 
