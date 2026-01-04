@@ -432,6 +432,7 @@ test("GET /review/:review_id returns review with user interaction", async () => 
     likes: 1,
     comments: [
       {
+        id: comment.id,
         desc: comment.desc,
         created: expect.any(String),
         profile: {

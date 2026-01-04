@@ -54,6 +54,7 @@ export type ReviewDetailsDto = {
 };
 
 export type CommentDto = {
+  id: string;
   desc: string;
   created: Date;
   profile: {
@@ -166,6 +167,7 @@ export class ReviewController extends Controller {
       comments: orm_review.comments.map(
         (comment) =>
           ({
+            id: comment.id,
             desc: comment.desc,
             created: comment.created,
             profile: {
