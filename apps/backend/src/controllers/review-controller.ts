@@ -36,6 +36,7 @@ export type ReviewDto = {
 };
 
 export type ReviewDetailsDto = {
+  id: string;
   title: string;
   description: string;
   rating: number;
