@@ -83,7 +83,7 @@ model Like {
   review_id String
   review    Review @relation(fields: [review_id], references: [id])
 
-  @@id([profile_id, review_id])
+  @@id(name: "like_id", [profile_id, review_id])
 }
 
 // Explicit m-n relation between profile-review

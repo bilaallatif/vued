@@ -8,6 +8,7 @@ import {
   Body,
   Middlewares,
   Get,
+  Path,
 } from "tsoa";
 import { Request as ExRequest } from "express";
 import { HttpError } from "../types/exceptions";
@@ -49,6 +50,10 @@ export type ReviewDetailsDto = {
     };
     bio: string;
   };
+};
+
+export type LikeStatusDto = {
+  liked: boolean;
 };
 
 @injectable()
@@ -112,5 +117,22 @@ export class ReviewController extends Controller {
           },
         }) as ReviewDetailsDto,
     );
+  }
+
+  @Get("/{review_id}/like/me/status")
+  public async getLikeStatus(
+    @Path() review_id: string,
+    @Request() req: ExRequest,
+  ): Promise<LikeStatusDto> {
+    const profile = await this.profileService.getByUserId(
+      req.res?.locals.userId,
+    );
+    if (profile == null) throw new HttpError(404, "Profile not found");
+
+    const orm_like = await this.reviewService.getLike(review_id, profile.id);
+
+    return {
+      liked: orm_like != null,
+    };
   }
 }

@@ -1,0 +1,1 @@
+ALTER TABLE "public"."Like" RENAME CONSTRAINT "Like_pkey" TO "like_id";
