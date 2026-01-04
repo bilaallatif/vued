@@ -9,7 +9,11 @@ import {
   FormSearch,
   FormTextArea,
 } from "../../../components/forms.tsx";
-import { Default, type ReviewDetailsDto } from "@vued/sdk/api";
+import {
+  Default,
+  type ReviewDetailsDto,
+  type ReviewDetailsWithInteractionsDto,
+} from "@vued/sdk/api";
 import { List } from "../../../components/list.tsx";
 import { Card } from "../../../components/card.tsx";
 
@@ -93,22 +97,75 @@ const NewReviewModal = ({
 const ReviewInspectionModal = ({
   isOpen,
   onClose,
-  details,
+  review_id,
 }: {
   isOpen: boolean;
   onClose: () => void;
-  details: ReviewDetailsDto;
+  review_id: string;
 }) => {
+  const [reviewDetails, setReviewDetails] =
+    useState<ReviewDetailsWithInteractionsDto | null>(null);
+  const [liked, setLiked] = useState<boolean | null>(false);
+  const [reloadKey, setReloadKey] = useState(0);
+
+  const populateReviewDetails = async () => {
+    const reviews_data = await Default.getReview({
+      path: { review_id: review_id },
+    });
+    if (!reviews_data.error && reviews_data.data) {
+      setReviewDetails(reviews_data.data);
+    }
+  };
+
+  const populateLiked = async () => {
+    const liked_data = await Default.getLikeStatus({
+      path: { review_id: review_id },
+    });
+    if (!liked_data.error && liked_data.data) {
+      setLiked(liked_data.data.liked);
+    }
+  };
+
+  useEffect(() => {
+    populateReviewDetails();
+    populateLiked();
+  }, [reloadKey]);
+
+  const likeStatusChange = async () => {
+    if (liked) {
+      await Default.unlikeReview({ path: { review_id: review_id } });
+    } else {
+      await Default.likeReview({ path: { review_id: review_id } });
+    }
+    // trigger data reload
+    setReloadKey((k) => k + 1);
+  };
+
+  if (!reviewDetails || liked == null) return null;
+
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <div className={"text-5xl text-yellow-600"}>
-        {details.title} ({details.rating})
+        {reviewDetails.title} ({reviewDetails.rating})
       </div>
       <div className={"w-full flex-1 flex flex-col items-start gap-10 py-20"}>
-        <div className={"text-2xl text-neutral-400"}>{details.movie.title}</div>
-        <div className={"text-xl text-neutral-400"}>{details.description}</div>
+        <div className={"text-2xl text-neutral-400"}>
+          {reviewDetails.movie.title}
+        </div>
         <div className={"text-xl text-neutral-400"}>
-          - {details.profile.user.username}
+          {reviewDetails.description}
+        </div>
+        <div className={"text-xl text-neutral-400"}>
+          - {reviewDetails.profile.user.username}
+        </div>
+        <div className={"flex flex-row gap-10 items-center"}>
+          <div className={"text-xl text-neutral-400"}>
+            {reviewDetails.likes} likes
+          </div>
+          <BasicButton
+            onClick={async () => await likeStatusChange()}
+            text={liked ? "Unlike" : "Like"}
+          />
         </div>
       </div>
     </Modal>
@@ -122,7 +179,7 @@ const ReviewCard = ({ details }: { details: ReviewDetailsDto }) => {
       <ReviewInspectionModal
         isOpen={isReviewInspectionOpen}
         onClose={() => setIsReviewInspectionOpen(false)}
-        details={details}
+        review_id={details.id}
       />
       <Card onClick={() => setIsReviewInspectionOpen(true)}>
         <div className={"w-full flex flex-col items-start"}>
