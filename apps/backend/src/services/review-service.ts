@@ -1,5 +1,6 @@
 import { inject, injectable } from "inversify";
 import { Prisma, PrismaClient, Review } from "@prisma/client";
+import { DatabaseError, ERR, OK, Result } from "../types/result";
 
 @injectable()
 export class ReviewService {
@@ -104,11 +105,23 @@ export class ReviewService {
     return comment;
   }
 
-  public async deleteComment(comment_id: string, profile_id: string) {
-    const comment = await this.db_client.comment.delete({
+  public async deleteComment(
+    comment_id: string,
+    profile_id: string,
+  ): Promise<Result<undefined, DatabaseError>> {
+    // check comment is from expected profile
+    const comment = await this.db_client.comment.findUnique({
       where: { comment_id: { id: comment_id, profile_id: profile_id } },
     });
 
-    return comment;
+    if (comment == null) {
+      return ERR(DatabaseError.NOT_FOUND);
+    }
+
+    await this.db_client.comment.delete({
+      where: { id: comment.id },
+    });
+
+    return OK(undefined);
   }
 }

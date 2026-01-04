@@ -1,9 +1,9 @@
 import {
   Controller,
   Delete,
-  Request,
   Middlewares,
   Path,
+  Request,
   Route,
   SuccessResponse,
 } from "tsoa";
@@ -13,6 +13,7 @@ import { ReviewService } from "../services/review-service";
 import { HttpError } from "../types/exceptions";
 import { ProfileService } from "../services/profile-service";
 import { Request as ExRequest } from "express";
+import { DatabaseError } from "../types/result";
 
 @injectable()
 @Route("/comment")
@@ -36,6 +37,16 @@ export class CommentController extends Controller {
     );
     if (profile == null) throw new HttpError(404, "Profile not found");
 
-    await this.reviewService.deleteComment(comment_id, profile.id);
+    const comment_result = await this.reviewService.deleteComment(
+      comment_id,
+      profile.id,
+    );
+    if (!comment_result.ok)
+      switch (comment_result.error) {
+        case DatabaseError.NOT_FOUND:
+          throw new HttpError(404, "Comment not found for this user");
+        default:
+          throw new HttpError(500, "Failed to delete comment");
+      }
   }
 }
