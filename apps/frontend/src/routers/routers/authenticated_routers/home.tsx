@@ -106,6 +106,7 @@ const ReviewInspectionModal = ({
   const [reviewDetails, setReviewDetails] =
     useState<ReviewDetailsWithInteractionsDto | null>(null);
   const [liked, setLiked] = useState<boolean | null>(false);
+  const [comment, setComment] = useState("");
   const [reloadKey, setReloadKey] = useState(0);
 
   const populateReviewDetails = async () => {
@@ -131,6 +132,10 @@ const ReviewInspectionModal = ({
     populateLiked();
   }, [reloadKey]);
 
+  const triggerReload = () => {
+    setReloadKey((k) => k + 1);
+  };
+
   const likeStatusChange = async () => {
     if (liked) {
       await Default.unlikeReview({ path: { review_id: review_id } });
@@ -138,7 +143,21 @@ const ReviewInspectionModal = ({
       await Default.likeReview({ path: { review_id: review_id } });
     }
     // trigger data reload
-    setReloadKey((k) => k + 1);
+    triggerReload();
+  };
+
+  const leaveComment = async () => {
+    await Default.commentReview({
+      path: { review_id: review_id },
+      body: { desc: comment },
+    });
+    setComment("");
+    triggerReload();
+  };
+
+  const removeComment = async (comment_id: string) => {
+    await Default.uncommentReview({ path: { comment_id: comment_id } });
+    triggerReload();
   };
 
   if (!reviewDetails || liked == null) return null;
@@ -166,6 +185,29 @@ const ReviewInspectionModal = ({
             onClick={async () => await likeStatusChange()}
             text={liked ? "Unlike" : "Like"}
           />
+        </div>
+        <div className={"flex flex-row gap-10 items-center"}>
+          <FormInput name={""} value={comment} setValue={setComment} />
+          <BasicButton
+            onClick={async () => await leaveComment()}
+            text={"Comment"}
+          />
+        </div>
+        <div className={"flex flex-col gap-5"}>
+          {reviewDetails.comments.map((comment) => (
+            <div className={"flex flex-row gap-10"} key={comment.id}>
+              <div className={"text-neutral-400"}>
+                {comment.desc} - {comment.profile.user.username}(
+                {comment.created})
+              </div>
+              {comment.editable ? (
+                <BasicButton
+                  text={"delete"}
+                  onClick={async () => await removeComment(comment.id)}
+                />
+              ) : null}
+            </div>
+          ))}
         </div>
       </div>
     </Modal>
