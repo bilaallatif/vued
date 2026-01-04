@@ -367,6 +367,21 @@ test("GET /review/:review_id returns review with user interaction", async () => 
     where: { user_id: mock_user.id },
   });
 
+  const mock_different_user = await db_client.user.create({
+    data: {
+      username: "bilaal2",
+      password: "test",
+      profile: {
+        create: {
+          bio: "Edit your bio!",
+        },
+      },
+    },
+  });
+  const mock_different_profile = await db_client.profile.findUnique({
+    where: { user_id: mock_different_user.id },
+  });
+
   // Mock movie
   const mock_movie = await db_client.movie.create({
     data: {
@@ -394,10 +409,19 @@ test("GET /review/:review_id returns review with user interaction", async () => 
     },
   });
 
+  // comment from authenticated user
   const comment = await db_client.comment.create({
     data: {
       review_id: review.id,
       profile_id: mock_profile.id,
+      desc: "Test Comment",
+    },
+  });
+
+  const non_authored_comment = await db_client.comment.create({
+    data: {
+      review_id: review.id,
+      profile_id: mock_different_profile.id,
       desc: "Test Comment",
     },
   });
@@ -440,6 +464,18 @@ test("GET /review/:review_id returns review with user interaction", async () => 
             username: mock_user.username,
           },
         },
+        editable: true,
+      },
+      {
+        id: non_authored_comment.id,
+        desc: non_authored_comment.desc,
+        created: expect.any(String),
+        profile: {
+          user: {
+            username: mock_different_user.username,
+          },
+        },
+        editable: false,
       },
     ],
   });
