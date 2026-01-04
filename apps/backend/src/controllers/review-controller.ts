@@ -52,6 +52,21 @@ export type ReviewDetailsDto = {
   };
 };
 
+export type CommentDto = {
+  desc: string;
+  created: Date;
+  profile: {
+    user: {
+      username: string;
+    };
+  };
+};
+
+export type ReviewDetailsWithInteractionsDto = ReviewDetailsDto & {
+  likes: number;
+  comments: CommentDto[];
+};
+
 export type LikeStatusDto = {
   liked: boolean;
 };
@@ -117,6 +132,45 @@ export class ReviewController extends Controller {
           },
         }) as ReviewDetailsDto,
     );
+  }
+
+  @Get("/{review_id}")
+  public async getReview(
+    @Path() review_id: string,
+  ): Promise<ReviewDetailsWithInteractionsDto> {
+    const orm_review = await this.reviewService.getReview(review_id);
+    if (orm_review == null) throw new HttpError(404, "Review not found");
+
+    return {
+      title: orm_review.title,
+      description: orm_review.description,
+      rating: orm_review.rating,
+      created: orm_review.created,
+      movie: {
+        title: orm_review.movie.title,
+        overview: orm_review.movie.overview,
+        poster_path: orm_review.movie.poster_path,
+      },
+      profile: {
+        user: {
+          username: orm_review.profile.user.username,
+        },
+        bio: orm_review.profile.bio,
+      },
+      likes: orm_review.likes.length,
+      comments: orm_review.comments.map(
+        (comment) =>
+          ({
+            desc: comment.desc,
+            created: comment.created,
+            profile: {
+              user: {
+                username: comment.profile.user.username,
+              },
+            },
+          }) as CommentDto,
+      ),
+    } as ReviewDetailsWithInteractionsDto;
   }
 
   @Get("/{review_id}/like/me/status")

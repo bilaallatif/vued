@@ -51,4 +51,19 @@ export class ReviewService {
     });
     return like;
   }
+
+  public async getReview(id: string) {
+    const review = await this.db_client.review.findUnique({
+      where: { id: id },
+      include: {
+        movie: true,
+        profile: { include: { user: true } },
+        // we only need like scalar info (will only display count)
+        likes: true,
+        // we need commentator info
+        comments: { include: { profile: { include: { user: true } } } },
+      },
+    });
+    return review;
+  }
 }
