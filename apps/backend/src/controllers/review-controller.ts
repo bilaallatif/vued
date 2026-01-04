@@ -9,6 +9,7 @@ import {
   Middlewares,
   Get,
   Path,
+  Delete,
 } from "tsoa";
 import { Request as ExRequest } from "express";
 import { HttpError } from "../types/exceptions";
@@ -171,6 +172,34 @@ export class ReviewController extends Controller {
           }) as CommentDto,
       ),
     } as ReviewDetailsWithInteractionsDto;
+  }
+
+  @SuccessResponse(204, "No Content")
+  @Post("/{review_id}/like")
+  public async likeReview(
+    @Path() review_id: string,
+    @Request() req: ExRequest,
+  ): Promise<void> {
+    const profile = await this.profileService.getByUserId(
+      req.res?.locals.userId,
+    );
+    if (profile == null) throw new HttpError(404, "Profile not found");
+
+    await this.reviewService.createLike(review_id, profile.id);
+  }
+
+  @SuccessResponse(204, "No Content")
+  @Delete("/{review_id}/like")
+  public async unlikeReview(
+    @Path() review_id: string,
+    @Request() req: ExRequest,
+  ): Promise<void> {
+    const profile = await this.profileService.getByUserId(
+      req.res?.locals.userId,
+    );
+    if (profile == null) throw new HttpError(404, "Profile not found");
+
+    await this.reviewService.deleteLike(review_id, profile.id);
   }
 
   @Get("/{review_id}/like/me/status")
