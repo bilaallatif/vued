@@ -347,3 +347,99 @@ test("GET /review/:review_id/like/me/status returns false for review not liked b
     liked: false,
   });
 });
+
+test("GET /review/:review_id returns review with user interaction", async () => {
+  const db_client: Prisma.TransactionClient = iocContainer.get("DB_CLIENT");
+
+  // Mock user + profile
+  const mock_user = await db_client.user.create({
+    data: {
+      username: "bilaal",
+      password: "test",
+      profile: {
+        create: {
+          bio: "Edit your bio!",
+        },
+      },
+    },
+  });
+  const mock_profile = await db_client.profile.findUnique({
+    where: { user_id: mock_user.id },
+  });
+
+  // Mock movie
+  const mock_movie = await db_client.movie.create({
+    data: {
+      tmdb_id: 1,
+      title: "Test Movie",
+      overview: "Test Overview",
+      poster_path: "test.jpg",
+    },
+  });
+
+  const review = await db_client.review.create({
+    data: {
+      title: "Test Title",
+      description: "Test Description",
+      rating: 5,
+      movie_id: mock_movie.id,
+      profile_id: mock_profile.id,
+    },
+  });
+
+  await db_client.like.create({
+    data: {
+      review_id: review.id,
+      profile_id: mock_profile.id,
+    },
+  });
+
+  const comment = await db_client.comment.create({
+    data: {
+      review_id: review.id,
+      profile_id: mock_profile.id,
+      desc: "Test Comment",
+    },
+  });
+
+  // Generate access token for user
+  const access_token = sign({ userId: mock_user.id }, "test", {
+    expiresIn: "60s",
+  });
+
+  const res = await request(app)
+    .get(`/review/${review.id}`)
+    .set("Authorization", `Bearer ${access_token}`);
+
+  expect(res.statusCode).toBe(200);
+
+  expect(res.body).toEqual({
+    title: review.title,
+    description: review.description,
+    rating: review.rating,
+    created: expect.any(String),
+    movie: {
+      title: mock_movie.title,
+      overview: mock_movie.overview,
+      poster_path: mock_movie.poster_path,
+    },
+    profile: {
+      bio: mock_profile.bio,
+      user: {
+        username: mock_user.username,
+      },
+    },
+    likes: 1,
+    comments: [
+      {
+        desc: comment.desc,
+        created: expect.any(String),
+        profile: {
+          user: {
+            username: mock_user.username,
+          },
+        },
+      },
+    ],
+  });
+});
