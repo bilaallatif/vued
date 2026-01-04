@@ -55,6 +55,18 @@ export class ReviewService {
     return review;
   }
 
+  public async getLike(review_id: string, profile_id: string) {
+    const like = await this.db_client.like.findUnique({
+      where: {
+        like_id: {
+          review_id: review_id,
+          profile_id: profile_id,
+        },
+      },
+    });
+    return like;
+  }
+
   public async createLike(review_id: string, profile_id: string) {
     const like = await this.db_client.like.create({
       data: {
@@ -67,18 +79,6 @@ export class ReviewService {
 
   public async deleteLike(review_id: string, profile_id: string) {
     const like = await this.db_client.like.delete({
-      where: {
-        like_id: {
-          review_id: review_id,
-          profile_id: profile_id,
-        },
-      },
-    });
-    return like;
-  }
-
-  public async getLike(review_id: string, profile_id: string) {
-    const like = await this.db_client.like.findUnique({
       where: {
         like_id: {
           review_id: review_id,
