@@ -122,6 +122,7 @@ export class ReviewController extends Controller {
     return orm_reviews.map(
       (orm_review) =>
         ({
+          id: orm_review.id,
           title: orm_review.title,
           description: orm_review.description,
           rating: orm_review.rating,

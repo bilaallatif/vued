@@ -212,6 +212,7 @@ test("GET /review returns list of reviews", async () => {
 
   expect(parsed_body).toEqual([
     {
+      id: review.id,
       title: review.title,
       description: review.description,
       rating: review.rating,
