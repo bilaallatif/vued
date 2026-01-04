@@ -174,6 +174,23 @@ export class ReviewController extends Controller {
     } as ReviewDetailsWithInteractionsDto;
   }
 
+  @Get("/{review_id}/like/me/status")
+  public async getLikeStatus(
+    @Path() review_id: string,
+    @Request() req: ExRequest,
+  ): Promise<LikeStatusDto> {
+    const profile = await this.profileService.getByUserId(
+      req.res?.locals.userId,
+    );
+    if (profile == null) throw new HttpError(404, "Profile not found");
+
+    const orm_like = await this.reviewService.getLike(review_id, profile.id);
+
+    return {
+      liked: orm_like != null,
+    };
+  }
+
   @SuccessResponse(204, "No Content")
   @Post("/{review_id}/like")
   public async likeReview(
@@ -200,22 +217,5 @@ export class ReviewController extends Controller {
     if (profile == null) throw new HttpError(404, "Profile not found");
 
     await this.reviewService.deleteLike(review_id, profile.id);
-  }
-
-  @Get("/{review_id}/like/me/status")
-  public async getLikeStatus(
-    @Path() review_id: string,
-    @Request() req: ExRequest,
-  ): Promise<LikeStatusDto> {
-    const profile = await this.profileService.getByUserId(
-      req.res?.locals.userId,
-    );
-    if (profile == null) throw new HttpError(404, "Profile not found");
-
-    const orm_like = await this.reviewService.getLike(review_id, profile.id);
-
-    return {
-      liked: orm_like != null,
-    };
   }
 }
