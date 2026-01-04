@@ -40,18 +40,6 @@ export class ReviewService {
     return reviews;
   }
 
-  public async getLike(review_id: string, profile_id: string) {
-    const like = await this.db_client.like.findUnique({
-      where: {
-        like_id: {
-          review_id: review_id,
-          profile_id: profile_id,
-        },
-      },
-    });
-    return like;
-  }
-
   public async getReview(id: string) {
     const review = await this.db_client.review.findUnique({
       where: { id: id },
@@ -65,5 +53,17 @@ export class ReviewService {
       },
     });
     return review;
+  }
+
+  public async getLike(review_id: string, profile_id: string) {
+    const like = await this.db_client.like.findUnique({
+      where: {
+        like_id: {
+          review_id: review_id,
+          profile_id: profile_id,
+        },
+      },
+    });
+    return like;
   }
 }
