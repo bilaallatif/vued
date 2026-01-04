@@ -72,6 +72,10 @@ export type LikeStatusDto = {
   liked: boolean;
 };
 
+export type CreateCommentDto = {
+  desc: string;
+};
+
 @injectable()
 @Route("/review")
 @Middlewares(authHandler)
@@ -217,5 +221,24 @@ export class ReviewController extends Controller {
     if (profile == null) throw new HttpError(404, "Profile not found");
 
     await this.reviewService.deleteLike(review_id, profile.id);
+  }
+
+  @SuccessResponse(204, "No Content")
+  @Post("/{review_id}/comment")
+  public async commentReview(
+    @Path() review_id: string,
+    @Body() requestBody: CreateCommentDto,
+    @Request() req: ExRequest,
+  ): Promise<void> {
+    const profile = await this.profileService.getByUserId(
+      req.res?.locals.userId,
+    );
+    if (profile == null) throw new HttpError(404, "Profile not found");
+
+    await this.reviewService.createComment(
+      requestBody.desc,
+      review_id,
+      profile.id,
+    );
   }
 }

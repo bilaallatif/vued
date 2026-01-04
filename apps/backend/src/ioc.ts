@@ -15,6 +15,7 @@ import { ReviewController } from "./controllers/review-controller";
 import { MovieService } from "./services/movie-service";
 import { TmdbController } from "./controllers/tmdb-controller";
 import { ProfileController } from "./controllers/profile-controller";
+import { CommentController } from "./controllers/comment-controller";
 
 const iocContainer: Container = new Container();
 
@@ -28,6 +29,7 @@ iocContainer.bind(TmdbController).toSelf().inSingletonScope();
 iocContainer.bind(UserController).toSelf().inSingletonScope();
 iocContainer.bind(ReviewController).toSelf().inSingletonScope();
 iocContainer.bind(ProfileController).toSelf().inSingletonScope();
+iocContainer.bind(CommentController).toSelf().inSingletonScope();
 
 // ~~~Services~~~
 

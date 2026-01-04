@@ -88,4 +88,27 @@ export class ReviewService {
     });
     return like;
   }
+
+  public async createComment(
+    desc: string,
+    review_id: string,
+    profile_id: string,
+  ) {
+    const comment = await this.db_client.comment.create({
+      data: {
+        desc: desc,
+        review_id: review_id,
+        profile_id: profile_id,
+      },
+    });
+    return comment;
+  }
+
+  public async deleteComment(comment_id: string, profile_id: string) {
+    const comment = await this.db_client.comment.delete({
+      where: { comment_id: { id: comment_id, profile_id: profile_id } },
+    });
+
+    return comment;
+  }
 }

@@ -98,4 +98,7 @@ model Comment {
 
   review_id String
   review    Review @relation(fields: [review_id], references: [id])
+
+  // allows use of composite as identifier
+  @@unique(name: "comment_id", [id, profile_id])
 }
