@@ -62,6 +62,7 @@ export type CommentDto = {
       username: string;
     };
   };
+  editable: boolean;
 };
 
 export type ReviewDetailsWithInteractionsDto = ReviewDetailsDto & {
@@ -143,6 +144,7 @@ export class ReviewController extends Controller {
   @Get("/{review_id}")
   public async getReview(
     @Path() review_id: string,
+    @Request() req: ExRequest,
   ): Promise<ReviewDetailsWithInteractionsDto> {
     const orm_review = await this.reviewService.getReview(review_id);
     if (orm_review == null) throw new HttpError(404, "Review not found");
@@ -175,6 +177,8 @@ export class ReviewController extends Controller {
                 username: comment.profile.user.username,
               },
             },
+            // We pre-compute which comments are editable based on the authenticated user's id
+            editable: comment.profile.user.id === req.res?.locals.userId,
           }) as CommentDto,
       ),
     } as ReviewDetailsWithInteractionsDto;
